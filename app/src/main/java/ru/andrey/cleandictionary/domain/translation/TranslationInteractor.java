@@ -2,7 +2,8 @@ package ru.andrey.cleandictionary.domain.translation;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.SingleObserver;
 import ru.andrey.cleandictionary.data.network.translation.TranslationService;
 import ru.andrey.cleandictionary.data.network.translation.YandexTranslate;
 import ru.andrey.cleandictionary.model.Language;
@@ -28,14 +29,11 @@ public class TranslationInteractor {
         mTranslation = translation;
     }
 
-    public void getTranslation(Observer<Translation> translationObserver) {
-        mTranslationService.setWordToTranslate(mTranslation);
-        mTranslationService.getTranslation()
-                .subscribe(s -> {
-                    mTranslation.setTranslation(s);
-                    System.out.println("call");
-                    translationObserver.onNext(mTranslation);
-                });
+    public SingleObserver<Translation> getTranslation(SingleObserver<Translation> translationObserver,
+                                                      Scheduler observeOnScheduler) {
+        return mTranslationService.getTranslation(mTranslation)
+                .observeOn(observeOnScheduler)
+                .subscribeWith(translationObserver);
     }
 
 }

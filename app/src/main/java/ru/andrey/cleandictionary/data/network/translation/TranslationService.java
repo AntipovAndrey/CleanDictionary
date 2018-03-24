@@ -6,7 +6,5 @@ import ru.andrey.cleandictionary.model.Translation;
 
 public interface TranslationService {
 
-    void setWordToTranslate(Translation word);
-
-    Single<String> getTranslation();
+    Single<Translation> getTranslation(Translation word);
 }

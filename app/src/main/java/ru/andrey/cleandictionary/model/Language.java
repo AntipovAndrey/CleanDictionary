@@ -1,11 +1,18 @@
 package ru.andrey.cleandictionary.model;
 
-/**
- * Created by andrey on 22.03.18.
- */
 
 public enum Language {
-    RUSSIAN,
-    ENGLISH,
-    KOREAN
+    RUSSIAN("ru"),
+    ENGLISH("en"),
+    FINNISH("fi");
+
+    private final String languageCode;
+
+    Language(String languageCode) {
+        this.languageCode = languageCode;
+    }
+
+    public String getLanguageCode() {
+        return languageCode;
+    }
 }
