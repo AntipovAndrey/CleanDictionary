@@ -7,8 +7,8 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import ru.andrey.cleandictionary.model.PostModel;
 import ru.andrey.cleandictionary.model.Translation;
+import ru.andrey.cleandictionary.model.TranslationResponseModel;
 
 
 public class YandexTranslate implements TranslationService {
@@ -41,10 +41,10 @@ public class YandexTranslate implements TranslationService {
     private void doTranslation(Translation word) throws IOException {
         final String langCodesFromTo =
                 word.getLanguageFrom().getLanguageCode() + "-" + word.getLanguageTo().getLanguageCode();
-        Response<PostModel> response = sApi.getData(API_KEY,
+        Response<TranslationResponseModel> response = sApi.getData(API_KEY,
                 word.getWord(),
                 langCodesFromTo).execute();
-        final PostModel body = response.body();
+        final TranslationResponseModel body = response.body();
         final String result = body.getText().get(0);
         word.setTranslation(result);
     }

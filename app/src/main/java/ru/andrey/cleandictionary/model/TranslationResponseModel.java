@@ -1,10 +1,11 @@
 package ru.andrey.cleandictionary.model;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class PostModel {
+import java.util.List;
+
+public class TranslationResponseModel {
 
     @SerializedName("code")
     @Expose
@@ -42,7 +43,7 @@ public class PostModel {
 
     @Override
     public String toString() {
-        return "PostModel{" +
+        return "TranslationResponseModel{" +
                 "code=" + code +
                 ", lang='" + lang + '\'' +
                 ", text=" + text +

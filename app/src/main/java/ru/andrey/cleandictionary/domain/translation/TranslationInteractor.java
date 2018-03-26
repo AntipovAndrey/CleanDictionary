@@ -17,7 +17,7 @@ public class TranslationInteractor {
     private final Translation mTranslation;
 
     public TranslationInteractor(String word, Language from, Language to) {
-        this(new Translation(word, from, to));
+        this(new Translation(word, from, to, false));
     }
 
     public TranslationInteractor(Translation translation) {
