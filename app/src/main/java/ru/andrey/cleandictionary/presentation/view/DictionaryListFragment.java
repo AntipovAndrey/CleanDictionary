@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -20,17 +23,20 @@ import ru.andrey.cleandictionary.presentation.presenter.DictionaryItem;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryListPresenter;
 
 public class DictionaryListFragment extends Fragment
-		implements WordAdapter.OnItemClickListener {
+		implements WordAdapter.OnItemClickListener, WordListView {
 	private RecyclerView mRecyclerView;
 	private ProgressBar mProgressBar;
 
-	DictionaryListPresenter mListPresenter = new DictionaryListPresenter();
+	DictionaryListPresenter mListPresenter = new DictionaryListPresenter(this);
 	private Disposable mSubscribe;
+	private WordAdapter mWordAdapter;
+	private MenuItem mFavoriteItem;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+		setHasOptionsMenu(true);
 	}
 
 	@Nullable
@@ -39,6 +45,9 @@ public class DictionaryListFragment extends Fragment
 		final View view = inflater.inflate(R.layout.dictionary_list_fragment, container, false);
 		mRecyclerView = view.findViewById(R.id.recycler_view);
 		mProgressBar = view.findViewById(R.id.progress_bar);
+		view.findViewById(R.id.add_button).setOnClickListener(v -> {
+			mListPresenter.addWord();
+		});
 		showProgressBar();
 		final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 		layoutManager.setStackFromEnd(true);
@@ -60,9 +69,8 @@ public class DictionaryListFragment extends Fragment
 					@Override
 					public void onSuccess(List<DictionaryItem> dictionaryItems) {
 						showRecyclerView();
-						final WordAdapter adapter =
-								new WordAdapter(dictionaryItems, DictionaryListFragment.this);
-						mRecyclerView.setAdapter(adapter);
+						mWordAdapter = new WordAdapter(dictionaryItems, DictionaryListFragment.this);
+						mRecyclerView.setAdapter(mWordAdapter);
 					}
 
 					@Override
@@ -78,6 +86,27 @@ public class DictionaryListFragment extends Fragment
 		mSubscribe.dispose();
 	}
 
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.main_menu, menu);
+		mFavoriteItem = menu.getItem(0);
+		setFavoriteMenuIcon(false);
+	}
+
+	@Override
+	public void setFavoriteMenuIcon(boolean activate) {
+		mFavoriteItem.setIcon(activate ?
+				R.drawable.ic_favorite_24dp : R.drawable.ic_favorite_border_24dp);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.favorite) {
+			mListPresenter.clickFavorite();
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 	private void showRecyclerView() {
 		mProgressBar.setVisibility(View.INVISIBLE);
 		mRecyclerView.setVisibility(View.VISIBLE);
@@ -90,6 +119,16 @@ public class DictionaryListFragment extends Fragment
 
 	@Override
 	public void onClicked(DictionaryItem item) {
-		mListPresenter.itemClicked(item, getContext());
+		mListPresenter.clickItem(item, getContext());
+	}
+
+	@Override
+	public List<DictionaryItem> getListFromAdapter() {
+		return mWordAdapter.getItemList();
+	}
+
+	@Override
+	public void setListListToAdapter(List<DictionaryItem> list) {
+		mWordAdapter.setList(list);
 	}
 }

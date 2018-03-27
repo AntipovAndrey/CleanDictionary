@@ -10,10 +10,9 @@ import java.util.List;
 import ru.andrey.cleandictionary.R;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryItem;
 
-public class WordAdapter extends RecyclerView.Adapter<WordViewHolder>
-		{
+public class WordAdapter extends RecyclerView.Adapter<WordViewHolder> {
 
-	private final List<DictionaryItem> mDictionaryItems;
+	private List<DictionaryItem> mDictionaryItems;
 	private final OnItemClickListener mListener;
 
 	public WordAdapter(List<DictionaryItem> dictionaryItems,
@@ -51,7 +50,16 @@ public class WordAdapter extends RecyclerView.Adapter<WordViewHolder>
 		return mDictionaryItems.size();
 	}
 
+	public List<DictionaryItem> getItemList() {
+		return mDictionaryItems;
+	}
 
+	public void setList(List<DictionaryItem> list) {
+		if (list != null) {
+			mDictionaryItems = list;
+			notifyDataSetChanged();
+		}
+	}
 
 	public interface OnItemClickListener {
 

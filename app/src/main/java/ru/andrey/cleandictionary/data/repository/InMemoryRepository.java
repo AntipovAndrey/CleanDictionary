@@ -7,21 +7,27 @@ import ru.andrey.cleandictionary.model.Language;
 import ru.andrey.cleandictionary.model.Translation;
 
 
-
 public class InMemoryRepository implements TranslationRepository {
 
 	private List<Translation> mWords = new ArrayList<>();
 	private int mIncrementor;
+
 	{
 		Language EN = Language.ENGLISH;
 		Language RU = Language.RUSSIAN;
 		Language FI = Language.FINNISH;
-		mWords.add(new Translation(1, "Привет", "Hello", RU, EN, false));
-		mWords.add(new Translation(2, "Close", "Закрыть", EN, RU, true));
-		mWords.add(new Translation(3, "Density", "Плотность", EN, RU, false));
-		mWords.add(new Translation(4, "Hyvää päivää", "Hello", FI, EN, false));
-		mWords.add(new Translation(5, "Kissa", "Кошка", FI, RU, false));
-		mWords.add(new Translation(6, "Throughout", "На протяжении", EN, RU, true));
+		mWords.add(new Translation(++mIncrementor, "Привет", "Hello", RU, EN, false));
+		mWords.add(new Translation(++mIncrementor, "Close", "Закрыть", EN, RU, true));
+		mWords.add(new Translation(++mIncrementor, "Density", "Плотность", EN, RU, false));
+		mWords.add(new Translation(++mIncrementor, "Hyvää päivää", "Hello", FI, EN, false));
+		mWords.add(new Translation(++mIncrementor, "Kissa", "Кошка", FI, RU, false));
+		mWords.add(new Translation(++mIncrementor, "Managed", "Договорилимь", EN, RU, true));
+		mWords.add(new Translation(++mIncrementor, "Мир", "World", RU, EN, true));
+		mWords.add(new Translation(++mIncrementor, "Illegal", "Недопустимый", EN, RU, true));
+		mWords.add(new Translation(++mIncrementor, "Home", "Дом", EN, RU, false));
+		mWords.add(new Translation(++mIncrementor, "Тетрадь", "Notebook", RU, EN, false));
+		mWords.add(new Translation(++mIncrementor, "Монитор", "Screen", RU, EN, false));
+		mWords.add(new Translation(++mIncrementor, "Uksi", "Одни", FI, RU, false));
 		mIncrementor = 6;
 	}
 

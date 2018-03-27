@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<EditText
+		android:id="@+id/editText"
+		android:layout_width="239dp"
+		android:layout_height="50dp"
+		android:layout_marginStart="32dp"
+		android:layout_marginTop="32dp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:text="Закрыть" />
+
+	<TextView
+		android:id="@+id/translation_text"
+		android:layout_width="239dp"
+		android:layout_height="39dp"
+		android:layout_marginTop="16dp"
+		app:layout_constraintStart_toStartOf="@+id/editText"
+		app:layout_constraintTop_toBottomOf="@+id/editText"
+		tools:text="Close" />
+
+	<Button
+		android:id="@+id/add_word"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="32dp"
+		android:layout_marginTop="32dp"
+		android:text="@string/add"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/translation_text" />
+
+</android.support.constraint.ConstraintLayout>
