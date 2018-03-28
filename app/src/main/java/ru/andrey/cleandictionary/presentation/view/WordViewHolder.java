@@ -8,10 +8,6 @@ import android.widget.TextView;
 
 import ru.andrey.cleandictionary.R;
 
-/**
- * Created by antipov_an on 26.03.2018.
- */
-
 public class WordViewHolder extends RecyclerView.ViewHolder
 		implements WordView {
 

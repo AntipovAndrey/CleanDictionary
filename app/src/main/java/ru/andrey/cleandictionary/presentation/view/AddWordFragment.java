@@ -21,10 +21,6 @@ import ru.andrey.cleandictionary.R;
 import ru.andrey.cleandictionary.presentation.presenter.AddWordPresenter;
 import rx.functions.Action1;
 
-/**
- * Created by antipov_an on 28.03.2018.
- */
-
 public class AddWordFragment extends Fragment
 		implements AddWordView {
 

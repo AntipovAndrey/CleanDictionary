@@ -8,9 +8,6 @@ import ru.andrey.cleandictionary.domain.translation.TranslationsListInteractor;
 import ru.andrey.cleandictionary.model.Translation;
 import ru.andrey.cleandictionary.presentation.view.AddWordView;
 
-/**
- * Created by antipov_an on 28.03.2018.
- */
 
 public class AddWordPresenter {
 	TranslationInteractor mTranslationInteractor = new TranslationInteractor();

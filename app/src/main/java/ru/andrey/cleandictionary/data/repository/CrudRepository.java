@@ -2,10 +2,6 @@ package ru.andrey.cleandictionary.data.repository;
 
 import java.util.List;
 
-/**
- * Created by antipov_an on 26.03.2018.
- */
-
 public interface CrudRepository<D, I> {
 
 	List<D> getAll();
