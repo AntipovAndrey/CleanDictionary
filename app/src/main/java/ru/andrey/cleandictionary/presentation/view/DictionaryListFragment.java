@@ -1,5 +1,7 @@
 package ru.andrey.cleandictionary.presentation.view;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,7 @@ import ru.andrey.cleandictionary.presentation.presenter.DictionaryListPresenter;
 
 public class DictionaryListFragment extends Fragment
 		implements WordAdapter.OnItemClickListener, WordListView {
+	public static final int WORD_ADDED_CODE = 1337;
 	private RecyclerView mRecyclerView;
 	private ProgressBar mProgressBar;
 
@@ -45,13 +48,9 @@ public class DictionaryListFragment extends Fragment
 		final View view = inflater.inflate(R.layout.dictionary_list_fragment, container, false);
 		mRecyclerView = view.findViewById(R.id.recycler_view);
 		mProgressBar = view.findViewById(R.id.progress_bar);
-		view.findViewById(R.id.add_button).setOnClickListener(v -> {
-			mListPresenter.addWord();
-		});
+		view.findViewById(R.id.add_button).setOnClickListener(v -> mListPresenter.addWord());
 		showProgressBar();
 		final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-		layoutManager.setStackFromEnd(true);
-		layoutManager.setReverseLayout(true);
 		mRecyclerView.setLayoutManager(layoutManager);
 		return view;
 	}
@@ -59,6 +58,10 @@ public class DictionaryListFragment extends Fragment
 	@Override
 	public void onStart() {
 		super.onStart();
+		refreshRecyclerView();
+	}
+
+	private void refreshRecyclerView() {
 		mListPresenter.getList()
 				.subscribe(new SingleObserver<List<DictionaryItem>>() {
 					@Override
@@ -70,6 +73,7 @@ public class DictionaryListFragment extends Fragment
 					public void onSuccess(List<DictionaryItem> dictionaryItems) {
 						showRecyclerView();
 						mWordAdapter = new WordAdapter(dictionaryItems, DictionaryListFragment.this);
+						Toast.makeText(getActivity(), "RV refreshed " + dictionaryItems.size(), Toast.LENGTH_SHORT).show();
 						mRecyclerView.setAdapter(mWordAdapter);
 					}
 
@@ -97,6 +101,20 @@ public class DictionaryListFragment extends Fragment
 	public void setFavoriteMenuIcon(boolean activate) {
 		mFavoriteItem.setIcon(activate ?
 				R.drawable.ic_favorite_24dp : R.drawable.ic_favorite_border_24dp);
+	}
+
+	@Override
+	public void startActivity(Class<? extends Activity> classActivity) {
+		startActivityForResult(new Intent(getActivity(), classActivity), WORD_ADDED_CODE);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == WORD_ADDED_CODE) {
+			refreshRecyclerView();
+			Toast.makeText(getActivity(), "updated", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override

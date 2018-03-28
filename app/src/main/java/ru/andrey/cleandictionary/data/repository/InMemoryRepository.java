@@ -11,6 +11,7 @@ public class InMemoryRepository implements TranslationRepository {
 
 	private List<Translation> mWords = new ArrayList<>();
 	private int mIncrementor;
+	private static InMemoryRepository sInstance;
 
 	{
 		Language EN = Language.ENGLISH;
@@ -28,11 +29,16 @@ public class InMemoryRepository implements TranslationRepository {
 		mWords.add(new Translation(++mIncrementor, "Тетрадь", "Notebook", RU, EN, false));
 		mWords.add(new Translation(++mIncrementor, "Монитор", "Screen", RU, EN, false));
 		mWords.add(new Translation(++mIncrementor, "Uksi", "Одни", FI, RU, false));
-		mIncrementor = 6;
+		mIncrementor = mWords.size();
+	}
+
+	private InMemoryRepository() {
+
 	}
 
 	@Override
 	public List<Translation> getAll() {
+		System.err.println(mWords.size());
 		return new ArrayList<>(mWords);
 	}
 
@@ -54,7 +60,7 @@ public class InMemoryRepository implements TranslationRepository {
 				return true;
 			}
 		}
-		item.setId(mIncrementor++);
+		item.setId(++mIncrementor);
 		mWords.add(item);
 		return true;
 	}
@@ -73,5 +79,16 @@ public class InMemoryRepository implements TranslationRepository {
 	@Override
 	public boolean delete(Translation item) {
 		return mWords.remove(item);
+	}
+
+	public static TranslationRepository getInstance() {
+		if (sInstance == null) {
+			synchronized (InMemoryRepository.class) {
+				if (sInstance == null) {
+					sInstance = new InMemoryRepository();
+				}
+			}
+		}
+		return sInstance;
 	}
 }

@@ -13,11 +13,12 @@ import ru.andrey.cleandictionary.presentation.presenter.DictionaryItem;
 
 
 public class TranslationsListInteractor {
-	TranslationRepository mRepository = new InMemoryRepository();
+	TranslationRepository mRepository = InMemoryRepository.getInstance();
 
 	public Single<List<DictionaryItem>> getTranslationList(Scheduler observeOnScheduler) {
-		return Single.defer(() -> Single.just(mRepository.getAll()))
+		return Single.fromCallable(() -> mRepository.getAll())
 				.map(translations -> {
+					System.out.println(translations.size());
 					final List<DictionaryItem> items = new ArrayList<>(translations.size());
 					for (Translation translation : translations) {
 						items.add(new DictionaryItem(translation));

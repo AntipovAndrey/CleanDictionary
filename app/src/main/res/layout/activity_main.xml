@@ -7,7 +7,7 @@
     tools:context="ru.andrey.cleandictionary.MainActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
@@ -23,7 +23,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="78dp"
         android:text="Button"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintStart_toStartOf="@+id/translation_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/translation_text_view" />
 
 </android.support.constraint.ConstraintLayout>

@@ -34,6 +34,18 @@ public class Translation {
 		mFavorite = favorite;
 	}
 
+	public Translation(String string, String langFrom, String langTo) {
+		for (Language language : Language.values()) {
+			if (langFrom.equals(language.getLanguageCode())) {
+				mLanguageFrom = language;
+			}
+			if (langTo.equals(language.getLanguageCode())) {
+				mLanguageTo = language;
+			}
+		}
+		mWord = string;
+	}
+
 	public int getId() {
 		return id;
 	}

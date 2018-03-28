@@ -10,7 +10,7 @@ import ru.andrey.cleandictionary.presentation.presenter.DictionaryItem;
  */
 
 public class FavoriteTranslationInteractor {
-	private TranslationRepository mRepository = new InMemoryRepository();
+	private TranslationRepository mRepository = InMemoryRepository.getInstance();
 
 	public void toggleFavorite(DictionaryItem item) {
 		final Translation model = item.getTranslationModel();

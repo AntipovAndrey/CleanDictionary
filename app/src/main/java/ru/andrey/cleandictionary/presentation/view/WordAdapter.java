@@ -5,6 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import ru.andrey.cleandictionary.R;
@@ -17,7 +20,9 @@ public class WordAdapter extends RecyclerView.Adapter<WordViewHolder> {
 
 	public WordAdapter(List<DictionaryItem> dictionaryItems,
 					   OnItemClickListener listener) {
-		mDictionaryItems = dictionaryItems;
+		Collections.reverse(dictionaryItems);
+		mDictionaryItems = new ArrayList<>();
+		mDictionaryItems.addAll(new LinkedHashSet<>(dictionaryItems));
 		mListener = listener;
 	}
 

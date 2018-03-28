@@ -1,7 +1,6 @@
 package ru.andrey.cleandictionary.presentation.presenter;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +9,7 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.andrey.cleandictionary.domain.translation.TranslationsListInteractor;
+import ru.andrey.cleandictionary.presentation.view.AddWordActivity;
 import ru.andrey.cleandictionary.presentation.view.WordListView;
 
 
@@ -64,10 +64,7 @@ public class DictionaryListPresenter {
 	}
 
 	public void addWord() {
-		DictionaryItem item = new DictionaryItem("Привет", "RUSSIAN", "FINNISH");
-		item.translateWord(() -> {
-			Log.i("DictionaryListPresenter", item.getTranslation());
-		});
-		Log.d("DictionaryListPresenter", "addWord");
+		mWordListView.startActivity(AddWordActivity.class);
+
 	}
 }

@@ -7,7 +7,7 @@
 	android:layout_height="match_parent">
 
 	<EditText
-		android:id="@+id/editText"
+		android:id="@+id/word_edit_text"
 		android:layout_width="239dp"
 		android:layout_height="50dp"
 		android:layout_marginStart="32dp"
@@ -17,12 +17,12 @@
 		tools:text="Закрыть" />
 
 	<TextView
-		android:id="@+id/translation_text"
+		android:id="@+id/translation_text_view"
 		android:layout_width="239dp"
 		android:layout_height="39dp"
 		android:layout_marginTop="16dp"
-		app:layout_constraintStart_toStartOf="@+id/editText"
-		app:layout_constraintTop_toBottomOf="@+id/editText"
+		app:layout_constraintStart_toStartOf="@+id/word_edit_text"
+		app:layout_constraintTop_toBottomOf="@+id/word_edit_text"
 		tools:text="Close" />
 
 	<Button
@@ -33,6 +33,6 @@
 		android:layout_marginTop="32dp"
 		android:text="@string/add"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/translation_text" />
+		app:layout_constraintTop_toBottomOf="@+id/translation_text_view" />
 
 </android.support.constraint.ConstraintLayout>
