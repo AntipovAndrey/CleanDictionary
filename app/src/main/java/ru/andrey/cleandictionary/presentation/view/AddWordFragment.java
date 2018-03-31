@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding.widget.RxAdapterView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.concurrent.TimeUnit;
@@ -22,80 +24,95 @@ import ru.andrey.cleandictionary.presentation.presenter.AddWordPresenter;
 import rx.functions.Action1;
 
 public class AddWordFragment extends Fragment
-		implements AddWordView {
+        implements AddWordView {
 
-	@LayoutRes
-	private static final int sLayout = R.layout.add_word_fragment;
+    @LayoutRes
+    private static final int sLayout = R.layout.add_word_fragment;
 
-	private EditText mWordEditText;
-	private TextView mTranslation;
-	private Button mAddButton;
+    private EditText mWordEditText;
+    private TextView mTranslation;
+    private Button mAddButton;
+    private Spinner mLangFromSpinner;
+    private Spinner mLangToSpinner;
 
-	AddWordPresenter mPresenter = new AddWordPresenter();
+    AddWordPresenter mPresenter = new AddWordPresenter();
 
-	@Nullable
-	@Override
-	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		final View view = inflater.inflate(sLayout, container, false);
-		mWordEditText = view.findViewById(R.id.word_edit_text);
-		mTranslation = view.findViewById(R.id.translation_text_view);
-		mAddButton = view.findViewById(R.id.add_word);
-		mAddButton.setOnClickListener(v -> mPresenter.addWord());
-		mPresenter.setView(this);
-		return view;
-	}
+    final Action1<String> mUpdateTranslationAction = string -> {
+        mPresenter.updateTranslation(string);
+    };
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		final Action1<String> updatedAction = string -> {
-			mPresenter.updateTranslation(string, getLangFrom(), getLangTo());
-		};
 
-		RxTextView.textChanges(mWordEditText)
-				.filter(charSequence -> charSequence.length() > 1)
-				.debounce(300, TimeUnit.MILLISECONDS)
-				.map(CharSequence::toString)
-				.observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
-				.subscribe(updatedAction);
-	}
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View view = inflater.inflate(sLayout, container, false);
+        mWordEditText = view.findViewById(R.id.word_edit_text);
+        mTranslation = view.findViewById(R.id.translation_text_view);
+        mAddButton = view.findViewById(R.id.add_word);
+        mLangFromSpinner = view.findViewById(R.id.lang_from_spinner);
+        mLangToSpinner = view.findViewById(R.id.lang_to_spinner);
 
-	private String getLangFrom() {
-		return "ru";
-	}
 
-	@Override
-	public void onStop() {
-		super.onStop();
-	}
+        String[] items = getResources().getStringArray(R.array.languages_spinner_items);
 
-	public String getLangTo() {
-		return "en";
-	}
+        RxAdapterView.itemSelections(mLangFromSpinner)
+                .subscribeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(i -> mPresenter.setLangFrom(items[i]));
 
-	@Override
-	public void showProgressBar(boolean enabled) {
-		//todo
-	}
+        RxAdapterView.itemSelections(mLangToSpinner)
+                .subscribeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(i -> mPresenter.setLangTo(items[i]));
 
-	@Override
-	public void updateTranslation(String word) {
-		mTranslation.setText(word);
-	}
+        mLangFromSpinner.setSelection(0);
+        mLangToSpinner.setSelection(1);
+        mPresenter.setLangFrom(items[0]);
+        mPresenter.setLangTo(items[1]);
 
-	@Override
-	public void errorToast(String error) {
-		Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
-	}
+        mAddButton.setOnClickListener(v -> mPresenter.addWord());
+        mPresenter.setView(this);
+        return view;
+    }
 
-	@Override
-	public void disableButton(boolean disabled) {
-		mAddButton.setEnabled(!disabled);
-	}
+    @Override
+    public void onStart() {
+        super.onStart();
 
-	@Override
-	public void close() {
-		getActivity().setResult(Activity.RESULT_OK);
-		getActivity().finish();
-	}
+        RxTextView.textChanges(mWordEditText)
+                .filter(charSequence -> charSequence.length() > 1)
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .map(CharSequence::toString)
+                .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(mUpdateTranslationAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void showProgressBar(boolean enabled) {
+        //todo
+    }
+
+    @Override
+    public void updateTranslation(String word) {
+        mTranslation.setText(word);
+    }
+
+    @Override
+    public void errorToast(String error) {
+        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void disableButton(boolean disabled) {
+        mAddButton.setEnabled(!disabled);
+    }
+
+    @Override
+    public void close() {
+        getActivity().setResult(Activity.RESULT_OK);
+        getActivity().finish();
+    }
 }

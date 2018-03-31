@@ -33,10 +33,10 @@ public class Translation {
 
 	public Translation(String string, String langFrom, String langTo) {
 		for (Language language : Language.values()) {
-			if (langFrom.equals(language.getLanguageCode())) {
+			if (langFrom.equalsIgnoreCase(language.getLanguageCode())) {
 				mLanguageFrom = language;
 			}
-			if (langTo.equals(language.getLanguageCode())) {
+			if (langTo.equalsIgnoreCase(language.getLanguageCode())) {
 				mLanguageTo = language;
 			}
 		}
@@ -113,5 +113,17 @@ public class Translation {
 		result = 31 * result + (mWord != null ? mWord.hashCode() : 0);
 		result = 31 * result + (mTranslation != null ? mTranslation.hashCode() : 0);
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "Translation{" +
+				"id=" + id +
+				", mWord='" + mWord + '\'' +
+				", mTranslation='" + mTranslation + '\'' +
+				", mLanguageFrom=" + mLanguageFrom +
+				", mLanguageTo=" + mLanguageTo +
+				", mFavorite=" + mFavorite +
+				'}';
 	}
 }

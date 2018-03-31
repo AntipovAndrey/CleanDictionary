@@ -28,7 +28,8 @@ public class TranslationInteractor {
         if (translation == null ||
                 translation.getLanguageFrom() == null ||
                 translation.getLanguageTo() == null) {
-            throw new IllegalArgumentException("Invalid translation");
+            throw new IllegalArgumentException("Invalid translation " +
+                    (translation != null ? translation.toString() : null));
         }
     }
 
