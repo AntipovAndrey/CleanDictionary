@@ -1,14 +1,18 @@
 package ru.andrey.cleandictionary.domain.translation;
 
-import ru.andrey.cleandictionary.data.repository.InMemoryRepository;
+import javax.inject.Inject;
+
+import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.data.repository.TranslationRepository;
 import ru.andrey.cleandictionary.model.Translation;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryItem;
 
 public class FavoriteTranslationInteractor {
-	private TranslationRepository mRepository = InMemoryRepository.getInstance();
+	@Inject
+	TranslationRepository mRepository;
 
 	public void toggleFavorite(DictionaryItem item) {
+		App.instance.getAppComponent().inject(this);
 		final Translation model = item.getTranslationModel();
 		model.toggleFavorite();
 		mRepository.save(model);

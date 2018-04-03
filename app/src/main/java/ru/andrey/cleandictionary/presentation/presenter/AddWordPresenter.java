@@ -1,23 +1,30 @@
 package ru.andrey.cleandictionary.presentation.presenter;
 
+import javax.inject.Inject;
+
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.domain.translation.TranslationInteractor;
-import ru.andrey.cleandictionary.domain.translation.TranslationsListInteractor;
 import ru.andrey.cleandictionary.model.Translation;
 import ru.andrey.cleandictionary.presentation.view.AddWordView;
 
 
 public class AddWordPresenter {
-    TranslationInteractor mTranslationInteractor = new TranslationInteractor();
-    TranslationsListInteractor mListInteractor = new TranslationsListInteractor();
+
+    @Inject
+    TranslationInteractor mTranslationInteractor;
 
     private AddWordView mView;
     private String mWord;
     private String mLangFrom;
     private String mLangTo;
     private String mTranslation;
+
+    public AddWordPresenter() {
+        App.instance.getTranslationComponent().inject(this);
+    }
 
     public void translateWord(SingleObserver<String> translationObserver, Translation translation) {
         mTranslationInteractor.getTranslation(new SingleObserver<Translation>() {
@@ -44,6 +51,7 @@ public class AddWordPresenter {
 
     public void setView(AddWordView view) {
         mView = view;
+        mView.disableButton(true);
     }
 
     public void updateTranslation(String string) {

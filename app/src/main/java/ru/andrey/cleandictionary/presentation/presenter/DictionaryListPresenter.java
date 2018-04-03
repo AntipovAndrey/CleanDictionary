@@ -5,9 +5,12 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.domain.translation.TranslationsListInteractor;
 import ru.andrey.cleandictionary.presentation.view.AddWordActivity;
 import ru.andrey.cleandictionary.presentation.view.WordListView;
@@ -15,12 +18,17 @@ import ru.andrey.cleandictionary.presentation.view.WordListView;
 
 public class DictionaryListPresenter {
 
-	TranslationsListInteractor mInteractor = new TranslationsListInteractor();
+	@Inject
+	TranslationsListInteractor mInteractor;
 
-	WordListView mWordListView;
+	private WordListView mWordListView;
 	private boolean mFavoriteEnabled;
 
-	List<DictionaryItem> mOriginalData;
+	private List<DictionaryItem> mOriginalData;
+
+	{
+		App.instance.getTranslationComponent().inject(this);
+	}
 
 	public DictionaryListPresenter(WordListView wordListView) {
 		mWordListView = wordListView;
@@ -65,6 +73,5 @@ public class DictionaryListPresenter {
 
 	public void addWord() {
 		mWordListView.startActivity(AddWordActivity.class);
-
 	}
 }

@@ -1,7 +1,9 @@
 package ru.andrey.cleandictionary.presentation.presenter;
 
+import javax.inject.Inject;
+
+import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.domain.translation.FavoriteTranslationInteractor;
-import ru.andrey.cleandictionary.model.Language;
 import ru.andrey.cleandictionary.model.Translation;
 import ru.andrey.cleandictionary.presentation.view.WordView;
 
@@ -9,20 +11,15 @@ public class DictionaryItem {
 
 	private final Translation mTranslation;
 	private WordView mWordView;
-	FavoriteTranslationInteractor mInteractor = new FavoriteTranslationInteractor();
+
+	@Inject
+	FavoriteTranslationInteractor mInteractor;
 
 
 	public DictionaryItem(Translation translation) {
+		App.instance.getTranslationComponent().inject(this);
 		mTranslation = translation;
 	}
-
-	public DictionaryItem(String word, String from, String to) {
-		mTranslation = new Translation(word,
-				Language.valueOf(from),
-				Language.valueOf(to),
-				false);
-	}
-
 
 	public String getHeader() {
 		return mTranslation.getWord();

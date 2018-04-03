@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -30,10 +30,12 @@ public class DictionaryListFragment extends Fragment
 	private RecyclerView mRecyclerView;
 	private ProgressBar mProgressBar;
 
-	DictionaryListPresenter mListPresenter = new DictionaryListPresenter(this);
+	private DictionaryListPresenter mListPresenter = new DictionaryListPresenter(this);
 	private Disposable mSubscribe;
 	private WordAdapter mWordAdapter;
 	private MenuItem mFavoriteItem;
+
+	public static final String TAG = DictionaryListFragment.class.getSimpleName();
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,13 +75,12 @@ public class DictionaryListFragment extends Fragment
 					public void onSuccess(List<DictionaryItem> dictionaryItems) {
 						showRecyclerView();
 						mWordAdapter = new WordAdapter(dictionaryItems, DictionaryListFragment.this);
-						Toast.makeText(getActivity(), "RV refreshed " + dictionaryItems.size(), Toast.LENGTH_SHORT).show();
 						mRecyclerView.setAdapter(mWordAdapter);
 					}
 
 					@Override
 					public void onError(Throwable e) {
-						Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+						Log.e(TAG, "Error: ", e);
 					}
 				});
 	}
@@ -113,7 +114,6 @@ public class DictionaryListFragment extends Fragment
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == WORD_ADDED_CODE) {
 			refreshRecyclerView();
-			Toast.makeText(getActivity(), "updated", Toast.LENGTH_SHORT).show();
 		}
 	}
 

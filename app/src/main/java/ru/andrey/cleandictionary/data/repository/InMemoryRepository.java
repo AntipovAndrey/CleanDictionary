@@ -32,10 +32,6 @@ public class InMemoryRepository implements TranslationRepository {
 		mIncrementor = mWords.size();
 	}
 
-	private InMemoryRepository() {
-
-	}
-
 	@Override
 	public List<Translation> getAll() {
 		System.err.println(mWords.size());
@@ -81,14 +77,4 @@ public class InMemoryRepository implements TranslationRepository {
 		return mWords.remove(item);
 	}
 
-	public static TranslationRepository getInstance() {
-		if (sInstance == null) {
-			synchronized (InMemoryRepository.class) {
-				if (sInstance == null) {
-					sInstance = new InMemoryRepository();
-				}
-			}
-		}
-		return sInstance;
-	}
 }
