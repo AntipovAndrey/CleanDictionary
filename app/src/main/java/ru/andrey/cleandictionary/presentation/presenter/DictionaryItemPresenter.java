@@ -7,7 +7,7 @@ import ru.andrey.cleandictionary.domain.translation.FavoriteTranslationInteracto
 import ru.andrey.cleandictionary.model.Translation;
 import ru.andrey.cleandictionary.presentation.view.WordView;
 
-public class DictionaryItem {
+public class DictionaryItemPresenter {
 
 	private final Translation mTranslation;
 	private WordView mWordView;
@@ -16,7 +16,7 @@ public class DictionaryItem {
 	FavoriteTranslationInteractor mInteractor;
 
 
-	public DictionaryItem(Translation translation) {
+	public DictionaryItemPresenter(Translation translation) {
 		App.instance.getTranslationComponent().inject(this);
 		mTranslation = translation;
 	}
@@ -59,7 +59,7 @@ public class DictionaryItem {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
-		DictionaryItem item = (DictionaryItem) o;
+		DictionaryItemPresenter item = (DictionaryItemPresenter) o;
 
 		return mTranslation != null ? mTranslation.equals(item.mTranslation) : item.mTranslation == null;
 	}

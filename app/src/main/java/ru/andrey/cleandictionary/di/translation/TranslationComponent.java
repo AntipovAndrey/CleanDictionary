@@ -3,7 +3,7 @@ package ru.andrey.cleandictionary.di.translation;
 import dagger.Component;
 import ru.andrey.cleandictionary.di.app.AppComponent;
 import ru.andrey.cleandictionary.presentation.presenter.AddWordPresenter;
-import ru.andrey.cleandictionary.presentation.presenter.DictionaryItem;
+import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryListPresenter;
 
 @Component(dependencies = AppComponent.class, modules = {TranslationModule.class})
@@ -13,5 +13,5 @@ public interface TranslationComponent {
 
 	void inject(AddWordPresenter presenter);
 
-	void inject(DictionaryItem item);
+	void inject(DictionaryItemPresenter item);
 }

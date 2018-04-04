@@ -32,14 +32,8 @@ public class Translation {
 	}
 
 	public Translation(String string, String langFrom, String langTo) {
-		for (Language language : Language.values()) {
-			if (langFrom.equalsIgnoreCase(language.getLanguageCode())) {
-				mLanguageFrom = language;
-			}
-			if (langTo.equalsIgnoreCase(language.getLanguageCode())) {
-				mLanguageTo = language;
-			}
-		}
+		mLanguageFrom = Language.byCode(langFrom);
+		mLanguageTo = Language.byCode(langTo);
 		mWord = string;
 	}
 

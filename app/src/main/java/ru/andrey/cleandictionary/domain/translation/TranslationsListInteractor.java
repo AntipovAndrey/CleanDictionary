@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers;
 import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.data.repository.TranslationRepository;
 import ru.andrey.cleandictionary.model.Translation;
-import ru.andrey.cleandictionary.presentation.presenter.DictionaryItem;
+import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
 
 
 public class TranslationsListInteractor {
@@ -23,13 +23,13 @@ public class TranslationsListInteractor {
 		App.instance.getAppComponent().inject(this);
 	}
 
-	public Single<List<DictionaryItem>> getTranslationList(Scheduler observeOnScheduler) {
+	public Single<List<DictionaryItemPresenter>> getTranslationList(Scheduler observeOnScheduler) {
 		return Single.fromCallable(() -> mRepository.getAll())
 				.map(translations -> {
 					System.out.println(translations.size());
-					final List<DictionaryItem> items = new ArrayList<>(translations.size());
+					final List<DictionaryItemPresenter> items = new ArrayList<>(translations.size());
 					for (Translation translation : translations) {
-						items.add(new DictionaryItem(translation));
+						items.add(new DictionaryItemPresenter(translation));
 					}
 					return items;
 				}).subscribeOn(Schedulers.io())

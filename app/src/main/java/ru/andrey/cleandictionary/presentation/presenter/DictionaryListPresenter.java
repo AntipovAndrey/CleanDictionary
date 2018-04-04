@@ -24,7 +24,7 @@ public class DictionaryListPresenter {
 	private WordListView mWordListView;
 	private boolean mFavoriteEnabled;
 
-	private List<DictionaryItem> mOriginalData;
+	private List<DictionaryItemPresenter> mOriginalData;
 
 	{
 		App.instance.getTranslationComponent().inject(this);
@@ -34,12 +34,12 @@ public class DictionaryListPresenter {
 		mWordListView = wordListView;
 	}
 
-	public Single<List<DictionaryItem>> getList() {
+	public Single<List<DictionaryItemPresenter>> getList() {
 		mOriginalData = null;
 		return mInteractor.getTranslationList(AndroidSchedulers.mainThread());
 	}
 
-	public void clickItem(DictionaryItem item, Context context) {
+	public void clickItem(DictionaryItemPresenter item, Context context) {
 
 	}
 
@@ -48,15 +48,15 @@ public class DictionaryListPresenter {
 		if (mOriginalData == null) {
 			mOriginalData = mWordListView.getListFromAdapter();
 		}
-		List<DictionaryItem> items = mOriginalData;
+		List<DictionaryItemPresenter> items = mOriginalData;
 
 		Single.just(items)
 				.subscribeOn(Schedulers.newThread())
 				.observeOn(AndroidSchedulers.mainThread())
 				.map(l -> {
 					if (mFavoriteEnabled) {
-						List<DictionaryItem> itemList = new ArrayList<>(items.size());
-						for (DictionaryItem item : items) {
+						List<DictionaryItemPresenter> itemList = new ArrayList<>(items.size());
+						for (DictionaryItemPresenter item : items) {
 							if (item.isFavorite()) {
 								itemList.add(item);
 							}

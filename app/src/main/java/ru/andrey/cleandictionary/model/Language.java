@@ -15,4 +15,13 @@ public enum Language {
     public String getLanguageCode() {
         return languageCode;
     }
+
+    public static Language byCode(String code) {
+        for (Language language : Language.values()) {
+            if (code.equalsIgnoreCase(language.getLanguageCode())) {
+                return language;
+            }
+        }
+        throw new IllegalArgumentException("Wrong code: " + code);
+    }
 }

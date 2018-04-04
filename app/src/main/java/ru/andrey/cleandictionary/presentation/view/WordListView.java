@@ -4,14 +4,14 @@ import android.app.Activity;
 
 import java.util.List;
 
-import ru.andrey.cleandictionary.presentation.presenter.DictionaryItem;
+import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
 
 
 public interface WordListView {
 
-	List<DictionaryItem> getListFromAdapter();
+	List<DictionaryItemPresenter> getListFromAdapter();
 
-	void setListListToAdapter(List<DictionaryItem> list);
+	void setListListToAdapter(List<DictionaryItemPresenter> list);
 
 	void setFavoriteMenuIcon(boolean activate);
 

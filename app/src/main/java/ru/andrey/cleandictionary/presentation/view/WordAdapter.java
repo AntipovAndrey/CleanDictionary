@@ -11,14 +11,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import ru.andrey.cleandictionary.R;
-import ru.andrey.cleandictionary.presentation.presenter.DictionaryItem;
+import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
 
 public class WordAdapter extends RecyclerView.Adapter<WordViewHolder> {
 
-	private List<DictionaryItem> mDictionaryItems;
+	private List<DictionaryItemPresenter> mDictionaryItems;
 	private final OnItemClickListener mListener;
 
-	public WordAdapter(List<DictionaryItem> dictionaryItems,
+	public WordAdapter(List<DictionaryItemPresenter> dictionaryItems,
 					   OnItemClickListener listener) {
 		Collections.reverse(dictionaryItems);
 		mDictionaryItems = new ArrayList<>();
@@ -35,7 +35,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordViewHolder> {
 
 	@Override
 	public void onBindViewHolder(WordViewHolder holder, int position) {
-		final DictionaryItem item = mDictionaryItems.get(position);
+		final DictionaryItemPresenter item = mDictionaryItems.get(position);
 		item.setView(holder);
 		holder.header.setText(item.getHeader());
 		holder.traslation.setText(item.getTranslation());
@@ -55,11 +55,11 @@ public class WordAdapter extends RecyclerView.Adapter<WordViewHolder> {
 		return mDictionaryItems.size();
 	}
 
-	public List<DictionaryItem> getItemList() {
+	public List<DictionaryItemPresenter> getItemList() {
 		return mDictionaryItems;
 	}
 
-	public void setList(List<DictionaryItem> list) {
+	public void setList(List<DictionaryItemPresenter> list) {
 		if (list != null) {
 			mDictionaryItems = list;
 			notifyDataSetChanged();
@@ -68,6 +68,6 @@ public class WordAdapter extends RecyclerView.Adapter<WordViewHolder> {
 
 	public interface OnItemClickListener {
 
-		void onClicked(DictionaryItem item);
+		void onClicked(DictionaryItemPresenter item);
 	}
 }

@@ -21,7 +21,7 @@ import java.util.List;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 import ru.andrey.cleandictionary.R;
-import ru.andrey.cleandictionary.presentation.presenter.DictionaryItem;
+import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryListPresenter;
 
 public class DictionaryListFragment extends Fragment
@@ -65,14 +65,14 @@ public class DictionaryListFragment extends Fragment
 
 	private void refreshRecyclerView() {
 		mListPresenter.getList()
-				.subscribe(new SingleObserver<List<DictionaryItem>>() {
+				.subscribe(new SingleObserver<List<DictionaryItemPresenter>>() {
 					@Override
 					public void onSubscribe(Disposable d) {
 						mSubscribe = d;
 					}
 
 					@Override
-					public void onSuccess(List<DictionaryItem> dictionaryItems) {
+					public void onSuccess(List<DictionaryItemPresenter> dictionaryItems) {
 						showRecyclerView();
 						mWordAdapter = new WordAdapter(dictionaryItems, DictionaryListFragment.this);
 						mRecyclerView.setAdapter(mWordAdapter);
@@ -136,17 +136,17 @@ public class DictionaryListFragment extends Fragment
 	}
 
 	@Override
-	public void onClicked(DictionaryItem item) {
+	public void onClicked(DictionaryItemPresenter item) {
 		mListPresenter.clickItem(item, getContext());
 	}
 
 	@Override
-	public List<DictionaryItem> getListFromAdapter() {
+	public List<DictionaryItemPresenter> getListFromAdapter() {
 		return mWordAdapter.getItemList();
 	}
 
 	@Override
-	public void setListListToAdapter(List<DictionaryItem> list) {
+	public void setListListToAdapter(List<DictionaryItemPresenter> list) {
 		mWordAdapter.setList(list);
 	}
 }
