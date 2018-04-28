@@ -1,15 +1,13 @@
 package ru.andrey.cleandictionary.presentation.presenter;
 
 import android.content.Context;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.disposables.Disposable;
 import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.domain.translation.TranslationsListInteractor;
 import ru.andrey.cleandictionary.presentation.view.AddWordActivity;
@@ -18,60 +16,53 @@ import ru.andrey.cleandictionary.presentation.view.WordListView;
 
 public class DictionaryListPresenter {
 
-	@Inject
-	TranslationsListInteractor mInteractor;
+    @Inject
+    TranslationsListInteractor mInteractor;
 
-	private WordListView mWordListView;
-	private boolean mFavoriteEnabled;
+    private WordListView mWordListView;
+    private boolean mFavoriteEnabled;
 
-	private List<DictionaryItemPresenter> mOriginalData;
+    private Disposable mDisposable;
 
-	{
-		App.instance.getTranslationComponent().inject(this);
-	}
+    {
+        App.instance.getTranslationComponent().inject(this);
+    }
 
-	public DictionaryListPresenter(WordListView wordListView) {
-		mWordListView = wordListView;
-	}
+    public DictionaryListPresenter(WordListView wordListView) {
+        mWordListView = wordListView;
+    }
 
-	public Single<List<DictionaryItemPresenter>> getList() {
-		mOriginalData = null;
-		return mInteractor.getTranslationList(AndroidSchedulers.mainThread());
-	}
+    public Observable<DictionaryItemPresenter> getList() {
+        return mInteractor.getTranslationsObserver();
+    }
 
-	public void clickItem(DictionaryItemPresenter item, Context context) {
+    public void clickItem(DictionaryItemPresenter item, Context context) {
+        Toast.makeText(context, item.getHeader() + " " + mFavoriteEnabled, Toast.LENGTH_SHORT).show();
+    }
 
-	}
+    public void clickFavorite() {
+        mFavoriteEnabled = !mFavoriteEnabled;
+        if (mDisposable != null) {
+            mDisposable.dispose();
+        }
 
-	public void clickFavorite() {
-		mFavoriteEnabled = !mFavoriteEnabled;
-		if (mOriginalData == null) {
-			mOriginalData = mWordListView.getListFromAdapter();
-		}
-		List<DictionaryItemPresenter> items = mOriginalData;
+        Observable<DictionaryItemPresenter> itemsObservable = getList()
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(ignored -> {
+                    mWordListView.setFavoriteMenuIcon(mFavoriteEnabled);
+                    mWordListView.reset();
+                });
 
-		Single.just(items)
-				.subscribeOn(Schedulers.newThread())
-				.observeOn(AndroidSchedulers.mainThread())
-				.map(l -> {
-					if (mFavoriteEnabled) {
-						List<DictionaryItemPresenter> itemList = new ArrayList<>(items.size());
-						for (DictionaryItemPresenter item : items) {
-							if (item.isFavorite()) {
-								itemList.add(item);
-							}
-						}
-						return itemList;
-					}
-					return l;
-				})
-				.subscribe(l -> {
-					mWordListView.setListListToAdapter(l);
-					mWordListView.setFavoriteMenuIcon(mFavoriteEnabled);
-				});
-	}
+        if (mFavoriteEnabled) {
+            itemsObservable = itemsObservable
+                    .filter(DictionaryItemPresenter::isFavorite);
+        }
 
-	public void addWord() {
-		mWordListView.startActivity(AddWordActivity.class);
-	}
+        mDisposable = itemsObservable
+                .subscribe(mWordListView::add);
+    }
+
+    public void addWord() {
+        mWordListView.startActivity(AddWordActivity.class);
+    }
 }

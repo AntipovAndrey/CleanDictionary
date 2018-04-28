@@ -1,16 +1,18 @@
 package ru.andrey.cleandictionary.data.repository;
 
-import java.util.List;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 
 public interface CrudRepository<D, I> {
 
-	List<D> getAll();
+	Observable<D> getAll();
 
-	D findOneById(I id);
+	Single<D> findOneById(I id);
 
-	boolean save(D item);
+	Completable save(D item);
 
-	boolean deleteById(I id);
+	Completable deleteById(I id);
 
-	boolean delete(D item);
+	Completable delete(D item);
 }

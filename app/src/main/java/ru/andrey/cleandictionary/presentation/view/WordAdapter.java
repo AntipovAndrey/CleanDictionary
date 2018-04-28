@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import ru.andrey.cleandictionary.R;
@@ -15,14 +13,11 @@ import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
 
 public class WordAdapter extends RecyclerView.Adapter<WordViewHolder> {
 
-	private List<DictionaryItemPresenter> mDictionaryItems;
+	private final List<DictionaryItemPresenter> mDictionaryItems = new ArrayList<>();
 	private final OnItemClickListener mListener;
 
-	public WordAdapter(List<DictionaryItemPresenter> dictionaryItems,
-					   OnItemClickListener listener) {
-		Collections.reverse(dictionaryItems);
-		mDictionaryItems = new ArrayList<>();
-		mDictionaryItems.addAll(new LinkedHashSet<>(dictionaryItems));
+	public WordAdapter(OnItemClickListener listener) {
+		reset();
 		mListener = listener;
 	}
 
@@ -59,11 +54,14 @@ public class WordAdapter extends RecyclerView.Adapter<WordViewHolder> {
 		return mDictionaryItems;
 	}
 
-	public void setList(List<DictionaryItemPresenter> list) {
-		if (list != null) {
-			mDictionaryItems = list;
-			notifyDataSetChanged();
-		}
+	public void add(DictionaryItemPresenter itemPresenter) {
+		mDictionaryItems.add(0, itemPresenter);
+		notifyDataSetChanged();
+	}
+
+	public void reset() {
+		mDictionaryItems.clear();
+		notifyDataSetChanged();
 	}
 
 	public interface OnItemClickListener {

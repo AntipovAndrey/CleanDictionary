@@ -38,6 +38,7 @@ public class TranslationInteractor {
     }
 
     public void saveWord(Translation t) {
-        mRepository.save(t);
+        mRepository.save(t)
+                .subscribe();
     }
 }

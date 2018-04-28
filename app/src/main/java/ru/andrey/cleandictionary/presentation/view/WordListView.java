@@ -11,10 +11,11 @@ public interface WordListView {
 
 	List<DictionaryItemPresenter> getListFromAdapter();
 
-	void setListListToAdapter(List<DictionaryItemPresenter> list);
-
 	void setFavoriteMenuIcon(boolean activate);
 
 	void startActivity(Class<? extends Activity> classActivity);
 
+	void add(DictionaryItemPresenter item);
+
+	void reset();
 }
