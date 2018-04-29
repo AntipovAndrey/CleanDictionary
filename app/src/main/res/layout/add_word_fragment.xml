@@ -1,57 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/word_edit_text"
-        android:layout_width="239dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Закрыть" />
-
-    <TextView
-        android:id="@+id/translation_text_view"
-        android:layout_width="239dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/word_edit_text"
-        app:layout_constraintTop_toBottomOf="@+id/word_edit_text"
-        tools:text="Close" />
-
-    <Button
-        android:id="@+id/add_word"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/add"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/translation_text_view" />
-
-    <Spinner
-        android:id="@+id/lang_from_spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:entries="@array/languages_spinner_items"
-        app:layout_constraintBottom_toBottomOf="@+id/word_edit_text"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/word_edit_text" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
 
-    <Spinner
-        android:id="@+id/lang_to_spinner"
-        android:layout_width="0dp"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/colorPrimaryDark"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/add_new_word"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textColor="@color/white"
+                    tools:text="Add new word" />
+
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/translation_text_view"
+                android:layout_width="239dp"
+                android:layout_height="39dp"
+                android:layout_marginBottom="32dp"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/word_edit_text"
+                app:layout_constraintTop_toBottomOf="@+id/word_edit_text"
+                tools:text="Close" />
+
+            <Spinner
+                android:id="@+id/lang_to_spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:entries="@array/languages_spinner_items"
+                app:layout_constraintBottom_toBottomOf="@+id/translation_text_view"
+                app:layout_constraintEnd_toEndOf="@+id/lang_from_spinner"
+                app:layout_constraintStart_toStartOf="@+id/lang_from_spinner" />
+
+            <EditText
+                android:id="@+id/word_edit_text"
+                android:layout_width="239dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:hint="@string/enter_word_here_hint"
+                android:lineSpacingExtra="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#DE000000"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView"
+                tools:text="Закрыть" />
+
+            <!--<Button-->
+            <!--android:id="@+id/add_word"-->
+            <!--style="@style/Widget.AppCompat.Button.Colored"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:text="@string/add"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/translation_text_view" />-->
+
+            <Spinner
+                android:id="@+id/lang_from_spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:entries="@array/languages_spinner_items"
+                app:layout_constraintBottom_toBottomOf="@+id/word_edit_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/word_edit_text" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/languages_spinner_items"
-        app:layout_constraintBottom_toBottomOf="@+id/translation_text_view"
-        app:layout_constraintEnd_toEndOf="@+id/lang_from_spinner"
-        app:layout_constraintStart_toStartOf="@+id/lang_from_spinner" />
+        android:layout_marginTop="-32dp"
+        android:elevation="2dp"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp">
 
-</android.support.constraint.ConstraintLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginRight="32dp"
+            android:src="@drawable/ic_done_24dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,7 +31,7 @@ public class AddWordFragment extends Fragment
 
     private EditText mWordEditText;
     private TextView mTranslation;
-    private Button mAddButton;
+    private FloatingActionButton mAddButton;
     private Spinner mLangFromSpinner;
     private Spinner mLangToSpinner;
 
