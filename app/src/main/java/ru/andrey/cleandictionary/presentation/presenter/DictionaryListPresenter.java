@@ -1,7 +1,6 @@
 package ru.andrey.cleandictionary.presentation.presenter;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -37,7 +36,7 @@ public class DictionaryListPresenter {
     }
 
     public void clickItem(DictionaryItemPresenter item, Context context) {
-        Toast.makeText(context, item.getHeader() + " " + mFavoriteEnabled, Toast.LENGTH_SHORT).show();
+
     }
 
     public void clickFavorite() {
