@@ -4,18 +4,17 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
-import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.data.repository.TranslationRepository;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
 
 
 public class TranslationsListInteractor {
 
-    @Inject
-    TranslationRepository mRepository;
+    private TranslationRepository mRepository;
 
-    public TranslationsListInteractor() {
-        App.instance.getAppComponent().inject(this);
+    @Inject
+    public TranslationsListInteractor(TranslationRepository repository) {
+        mRepository = repository;
     }
 
     public Observable<DictionaryItemPresenter> getTranslationsObserver() {

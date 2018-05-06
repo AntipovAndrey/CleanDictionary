@@ -10,7 +10,7 @@ public interface CrudRepository<D, I> {
 
 	Single<D> findOneById(I id);
 
-	Completable save(D item);
+	Single<D> save(D item);
 
 	Completable deleteById(I id);
 

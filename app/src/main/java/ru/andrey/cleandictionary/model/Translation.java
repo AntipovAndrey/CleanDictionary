@@ -3,121 +3,132 @@ package ru.andrey.cleandictionary.model;
 
 public class Translation {
 
-	private int id;
-	private String mWord;
-	private String mTranslation;
-	private Language mLanguageFrom;
-	private Language mLanguageTo;
-	private boolean mFavorite;
+    private int id;
+    private String mWord;
+    private String mTranslation;
+    private Language mLanguageFrom;
+    private Language mLanguageTo;
+    private boolean mFavorite;
 
-	public Translation() {
-	}
+    public Translation() {
+    }
 
-	public Translation(int id,
-					   String word,
-					   String translation,
-					   Language languageFrom,
-					   Language languageTo,
-					   boolean favorite) {
-		this(word, languageFrom, languageTo, favorite);
-		this.id = id;
-		mTranslation = translation;
-	}
+    public Translation(int id,
+                       String word,
+                       String translation,
+                       Language languageFrom,
+                       Language languageTo,
+                       boolean favorite) {
+        this(word, languageFrom, languageTo, favorite);
+        this.id = id;
+        mTranslation = translation;
+    }
 
-	public Translation(String word, Language languageFrom, Language languageTo, boolean favorite) {
-		mWord = word;
-		mLanguageFrom = languageFrom;
-		mLanguageTo = languageTo;
-		mFavorite = favorite;
-	}
+    public Translation(String word, Language languageFrom, Language languageTo, boolean favorite) {
+        mWord = word;
+        mLanguageFrom = languageFrom;
+        mLanguageTo = languageTo;
+        mFavorite = favorite;
+    }
 
-	public Translation(String string, String langFrom, String langTo) {
-		mLanguageFrom = Language.byCode(langFrom);
-		mLanguageTo = Language.byCode(langTo);
-		mWord = string;
-	}
+    public Translation(String string, String langFrom, String langTo) {
+        mLanguageFrom = Language.byCode(langFrom);
+        mLanguageTo = Language.byCode(langTo);
+        mWord = string;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public Translation(Translation translation) {
+        this(translation.mWord,
+                translation.mLanguageFrom,
+                translation.mLanguageTo,
+                translation.mFavorite);
+        id = translation.id;
+        mTranslation = translation.mTranslation;
+    }
 
-	public String getWord() {
-		return mWord;
-	}
 
-	public String getTranslation() {
-		return mTranslation;
-	}
 
-	public Language getLanguageFrom() {
-		return mLanguageFrom;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public Language getLanguageTo() {
-		return mLanguageTo;
-	}
+    public String getWord() {
+        return mWord;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public String getTranslation() {
+        return mTranslation;
+    }
 
-	public void setWord(String word) {
-		mWord = word;
-	}
+    public Language getLanguageFrom() {
+        return mLanguageFrom;
+    }
 
-	public void setTranslation(String translation) {
-		mTranslation = translation;
-	}
+    public Language getLanguageTo() {
+        return mLanguageTo;
+    }
 
-	public void setLanguageFrom(Language languageFrom) {
-		mLanguageFrom = languageFrom;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setLanguageTo(Language languageTo) {
-		mLanguageTo = languageTo;
-	}
+    public void setWord(String word) {
+        mWord = word;
+    }
 
-	public boolean isFavorite() {
-		return mFavorite;
-	}
+    public void setTranslation(String translation) {
+        mTranslation = translation;
+    }
 
-	public void toggleFavorite() {
-		mFavorite = !mFavorite;
-	}
+    public void setLanguageFrom(Language languageFrom) {
+        mLanguageFrom = languageFrom;
+    }
 
-	public void setFavorite(boolean favorite) {
-		mFavorite = favorite;
-	}
+    public void setLanguageTo(Language languageTo) {
+        mLanguageTo = languageTo;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Translation)) return false;
+    public boolean isFavorite() {
+        return mFavorite;
+    }
 
-		Translation that = (Translation) o;
+    public void toggleFavorite() {
+        mFavorite = !mFavorite;
+    }
 
-		if (id != that.id) return false;
-		if (mWord != null ? !mWord.equals(that.mWord) : that.mWord != null) return false;
-		return mTranslation != null ? mTranslation.equals(that.mTranslation) : that.mTranslation == null;
-	}
+    public void setFavorite(boolean favorite) {
+        mFavorite = favorite;
+    }
 
-	@Override
-	public int hashCode() {
-		int result = id;
-		result = 31 * result + (mWord != null ? mWord.hashCode() : 0);
-		result = 31 * result + (mTranslation != null ? mTranslation.hashCode() : 0);
-		return result;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Translation)) return false;
 
-	@Override
-	public String toString() {
-		return "Translation{" +
-				"id=" + id +
-				", mWord='" + mWord + '\'' +
-				", mTranslation='" + mTranslation + '\'' +
-				", mLanguageFrom=" + mLanguageFrom +
-				", mLanguageTo=" + mLanguageTo +
-				", mFavorite=" + mFavorite +
-				'}';
-	}
+        Translation that = (Translation) o;
+
+        if (id != that.id) return false;
+        if (mWord != null ? !mWord.equals(that.mWord) : that.mWord != null) return false;
+        return mTranslation != null ? mTranslation.equals(that.mTranslation) : that.mTranslation == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (mWord != null ? mWord.hashCode() : 0);
+        result = 31 * result + (mTranslation != null ? mTranslation.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Translation{" +
+                "id=" + id +
+                ", mWord='" + mWord + '\'' +
+                ", mTranslation='" + mTranslation + '\'' +
+                ", mLanguageFrom=" + mLanguageFrom +
+                ", mLanguageTo=" + mLanguageTo +
+                ", mFavorite=" + mFavorite +
+                '}';
+    }
 }

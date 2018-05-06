@@ -3,18 +3,14 @@ package ru.andrey.cleandictionary.di.app;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import ru.andrey.cleandictionary.domain.translation.FavoriteTranslationInteractor;
-import ru.andrey.cleandictionary.domain.translation.TranslationInteractor;
-import ru.andrey.cleandictionary.domain.translation.TranslationsListInteractor;
+import ru.andrey.cleandictionary.data.network.translation.TranslationService;
+import ru.andrey.cleandictionary.data.repository.TranslationRepository;
 
 @Component(modules = {AppModule.class})
 @Singleton
 public interface AppComponent {
 
-	void inject(FavoriteTranslationInteractor interactor);
+    TranslationRepository translationRepository();
 
-	void inject(TranslationInteractor interactor);
-
-	void inject(TranslationsListInteractor interactor);
-
+    TranslationService translationService();
 }

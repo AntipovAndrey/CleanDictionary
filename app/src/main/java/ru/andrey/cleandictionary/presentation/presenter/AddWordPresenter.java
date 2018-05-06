@@ -85,8 +85,8 @@ public class AddWordPresenter {
     public void addWord() {
         final Translation t = new Translation(mWord, mLangFrom, mLangTo);
         t.setTranslation(mTranslation);
-        mTranslationInteractor.saveWord(t);
-
+        mTranslationInteractor.saveWord(t)
+                .subscribe();
         mView.close();
     }
 

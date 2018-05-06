@@ -10,7 +10,7 @@ import ru.andrey.cleandictionary.presentation.view.WordView;
 
 public class DictionaryItemPresenter {
 
-    private final Translation mTranslation;
+    private Translation mTranslation;
     private WordView mWordView;
 
     @Inject
@@ -31,9 +31,12 @@ public class DictionaryItemPresenter {
     }
 
     public void starClicked() {
-        mInteractor.toggleFavorite(this)
+        mInteractor.toggleFavorite(mTranslation)
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnComplete(() -> mWordView.setStar(mTranslation.isFavorite()))
+                .doOnSuccess(translation -> {
+                    mTranslation = translation;
+                    mWordView.setStar(mTranslation.isFavorite());
+                })
                 .subscribe();
     }
 
@@ -51,10 +54,6 @@ public class DictionaryItemPresenter {
 
     public void setView(WordView wordView) {
         mWordView = wordView;
-    }
-
-    public Translation getTranslationModel() {
-        return mTranslation;
     }
 
     @Override

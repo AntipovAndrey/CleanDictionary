@@ -3,21 +3,23 @@ package ru.andrey.cleandictionary.domain.translation;
 import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
+import io.reactivex.Single;
 import io.reactivex.SingleObserver;
-import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.data.network.translation.TranslationService;
 import ru.andrey.cleandictionary.data.repository.TranslationRepository;
+import ru.andrey.cleandictionary.di.translation.TranslationScope;
 import ru.andrey.cleandictionary.model.Translation;
 
+@TranslationScope
 public class TranslationInteractor {
 
-    @Inject
-    TranslationService mTranslationService;
-    @Inject
-    TranslationRepository mRepository;
+    private TranslationService mTranslationService;
+    private TranslationRepository mRepository;
 
-    public TranslationInteractor() {
-        App.instance.getAppComponent().inject(this);
+    @Inject
+    public TranslationInteractor(TranslationService translationService, TranslationRepository repository) {
+        mTranslationService = translationService;
+        mRepository = repository;
     }
 
     public SingleObserver<Translation> getTranslation(SingleObserver<Translation> translationObserver,
@@ -37,8 +39,7 @@ public class TranslationInteractor {
         }
     }
 
-    public void saveWord(Translation t) {
-        mRepository.save(t)
-                .subscribe();
+    public Single<Translation> saveWord(Translation t) {
+        return mRepository.save(t);
     }
 }

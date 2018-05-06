@@ -9,9 +9,9 @@ import ru.andrey.cleandictionary.presentation.presenter.DictionaryListPresenter;
 @Component(dependencies = AppComponent.class, modules = {TranslationModule.class})
 @TranslationScope
 public interface TranslationComponent {
-	void inject(DictionaryListPresenter presenter);
+    void inject(DictionaryListPresenter presenter);
 
-	void inject(AddWordPresenter presenter);
+    void inject(AddWordPresenter presenter);
 
-	void inject(DictionaryItemPresenter item);
+    void inject(DictionaryItemPresenter item);
 }

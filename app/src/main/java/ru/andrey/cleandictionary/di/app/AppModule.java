@@ -14,13 +14,13 @@ public class AppModule {
 
 	@Provides
 	@Singleton
-	public TranslationRepository provideTranslationRepository() {
+	TranslationRepository provideTranslationRepository() {
 		return new InMemoryRepository();
 	}
 
 	@Provides
 	@Singleton
-	public TranslationService providesTranslationService() {
+	TranslationService providesTranslationService() {
 		return new YandexTranslate();
 	}
 

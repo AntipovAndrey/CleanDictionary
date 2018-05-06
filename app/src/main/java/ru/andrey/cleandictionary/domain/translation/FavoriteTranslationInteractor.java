@@ -2,27 +2,26 @@ package ru.andrey.cleandictionary.domain.translation;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
-import ru.andrey.cleandictionary.App;
-import ru.andrey.cleandictionary.data.repository.TranslationRepository;
+import ru.andrey.cleandictionary.di.translation.TranslationScope;
 import ru.andrey.cleandictionary.model.Translation;
-import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
 
+@TranslationScope
 public class FavoriteTranslationInteractor {
-    @Inject
-    TranslationRepository mRepository;
 
-    public FavoriteTranslationInteractor() {
-        App.instance.getAppComponent().inject(this);
+    private TranslationInteractor mTranslationInteractor;
+
+    @Inject
+    public FavoriteTranslationInteractor(TranslationInteractor translationInteractor) {
+        mTranslationInteractor = translationInteractor;
     }
 
-    public Completable toggleFavorite(DictionaryItemPresenter item) {
-        return Completable.fromRunnable(() -> {
-            final Translation model = item.getTranslationModel();
-            model.toggleFavorite();
-            mRepository.save(model)
-                    .subscribe();
-        }).subscribeOn(Schedulers.io());
+    public Single<Translation> toggleFavorite(Translation item) {
+        return Single.just(item)
+                .map(Translation::new)
+                .doOnSuccess(Translation::toggleFavorite)
+                .flatMap(mTranslationInteractor::saveWord)
+                .subscribeOn(Schedulers.io());
     }
 }

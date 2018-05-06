@@ -54,16 +54,17 @@ public class InMemoryRepository implements TranslationRepository {
     }
 
     @Override
-    public Completable save(Translation item) {
-        return Completable.fromRunnable(() -> {
+    public Single<Translation> save(Translation item) {
+        return Single.fromCallable(() -> {
             for (int i = 0; i < mWords.size(); i++) {
                 if (item.getId() == mWords.get(i).getId()) {
                     mWords.set(i, item);
-                    return;
+                    return item;
                 }
             }
             item.setId(++mIncrementor);
             mWords.add(item);
+            return item;
         }).subscribeOn(Schedulers.io());
     }
 
