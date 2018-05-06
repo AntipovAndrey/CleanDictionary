@@ -6,7 +6,6 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 import ru.andrey.cleandictionary.model.Language;
 import ru.andrey.cleandictionary.model.Translation;
 
@@ -37,8 +36,7 @@ public class InMemoryRepository implements TranslationRepository {
 
     @Override
     public Observable<Translation> getAll() {
-        return Observable.fromIterable(mWords)
-                .subscribeOn(Schedulers.io());
+        return Observable.fromIterable(mWords);
     }
 
     @Override
@@ -50,7 +48,7 @@ public class InMemoryRepository implements TranslationRepository {
                 }
             }
             return null;
-        }).subscribeOn(Schedulers.io());
+        });
     }
 
     @Override
@@ -65,7 +63,7 @@ public class InMemoryRepository implements TranslationRepository {
             item.setId(++mIncrementor);
             mWords.add(item);
             return item;
-        }).subscribeOn(Schedulers.io());
+        });
     }
 
     @Override
@@ -76,13 +74,12 @@ public class InMemoryRepository implements TranslationRepository {
                     mWords.remove(word);
                 }
             }
-        }).subscribeOn(Schedulers.io());
+        });
     }
 
     @Override
     public Completable delete(Translation item) {
-        return Completable.fromRunnable(() -> mWords.remove(item))
-                .subscribeOn(Schedulers.io());
+        return Completable.fromRunnable(() -> mWords.remove(item));
     }
 
 }

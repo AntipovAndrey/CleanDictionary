@@ -17,7 +17,6 @@ import android.widget.ProgressBar;
 
 import java.util.List;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import ru.andrey.cleandictionary.R;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
@@ -72,7 +71,6 @@ public class DictionaryListFragment extends Fragment
                             showRecyclerView();
                             mRecyclerView.setAdapter(mWordAdapter);
                         })
-                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::add));
     }
 

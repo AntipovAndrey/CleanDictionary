@@ -2,9 +2,9 @@ package ru.andrey.cleandictionary.presentation.presenter;
 
 import javax.inject.Inject;
 
-import io.reactivex.SingleObserver;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.domain.translation.TranslationInteractor;
 import ru.andrey.cleandictionary.model.Translation;
@@ -26,23 +26,10 @@ public class AddWordPresenter {
         App.instance.getTranslationComponent().inject(this);
     }
 
-    public void translateWord(SingleObserver<String> translationObserver, Translation translation) {
-        mTranslationInteractor.getTranslation(new SingleObserver<Translation>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                translationObserver.onSubscribe(d);
-            }
-
-            @Override
-            public void onSuccess(Translation translation) {
-                translationObserver.onSuccess(translation.getTranslation());
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                translationObserver.onError(e);
-            }
-        }, AndroidSchedulers.mainThread(), translation);
+    public Single<Translation> translateWord(Translation translation) {
+        return mTranslationInteractor.getTranslation(translation)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public AddWordView getView() {
@@ -58,28 +45,22 @@ public class AddWordPresenter {
         mView.showProgressBar(true);
         mView.disableButton(true);
         mWord = string;
-        translateWord(new SingleObserver<String>() {
-                          @Override
-                          public void onSubscribe(Disposable d) {
-                              // no-op
-                          }
+        translateWord(new Translation(string, mLangFrom, mLangTo))
+                .map(Translation::getTranslation)
+                .subscribe(this::translationSucceed, this::translationError);
+    }
 
-                          @Override
-                          public void onSuccess(String s) {
-                              mView.updateTranslation(s);
-                              mTranslation = s;
-                              mView.showProgressBar(false);
-                              mView.disableButton(false);
-                          }
+    private void translationSucceed(String s) {
+        mView.updateTranslation(s);
+        mTranslation = s;
+        mView.showProgressBar(false);
+        mView.disableButton(false);
+    }
 
-                          @Override
-                          public void onError(Throwable e) {
-                              mView.errorToast("Error");
-                              mView.showProgressBar(true);
-                              mView.disableButton(true);
-                          }
-                      },
-                new Translation(string, mLangFrom, mLangTo));
+    private void translationError(Throwable error) {
+        mView.errorToast("Error");
+        mView.showProgressBar(true);
+        mView.disableButton(true);
     }
 
     public void addWord() {

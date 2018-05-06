@@ -32,7 +32,8 @@ public class DictionaryListPresenter {
     }
 
     public Observable<DictionaryItemPresenter> getList() {
-        return mInteractor.getTranslationsObserver();
+        return mInteractor.getTranslations()
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public void clickItem(DictionaryItemPresenter item, Context context) {
