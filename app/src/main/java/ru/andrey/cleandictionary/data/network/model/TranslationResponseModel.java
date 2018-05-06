@@ -1,4 +1,4 @@
-package ru.andrey.cleandictionary.model;
+package ru.andrey.cleandictionary.data.network.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

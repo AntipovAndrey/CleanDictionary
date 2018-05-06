@@ -6,9 +6,9 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import ru.andrey.cleandictionary.model.Language;
-import ru.andrey.cleandictionary.model.Translation;
-
+import ru.andrey.cleandictionary.domain.global.TranslationRepository;
+import ru.andrey.cleandictionary.domain.model.Language;
+import ru.andrey.cleandictionary.domain.model.Translation;
 
 public class InMemoryRepository implements TranslationRepository {
 

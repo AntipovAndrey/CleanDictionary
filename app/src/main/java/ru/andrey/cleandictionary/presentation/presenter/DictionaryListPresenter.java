@@ -8,7 +8,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import ru.andrey.cleandictionary.App;
-import ru.andrey.cleandictionary.domain.translation.TranslationsListInteractor;
+import ru.andrey.cleandictionary.domain.interactor.translationlist.TranslationsListInteractor;
 import ru.andrey.cleandictionary.presentation.view.AddWordActivity;
 import ru.andrey.cleandictionary.presentation.view.WordListView;
 

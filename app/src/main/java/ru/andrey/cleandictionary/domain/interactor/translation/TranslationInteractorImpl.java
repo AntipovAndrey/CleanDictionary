@@ -1,10 +1,10 @@
-package ru.andrey.cleandictionary.domain.translation;
+package ru.andrey.cleandictionary.domain.interactor.translation;
 
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
-import ru.andrey.cleandictionary.data.network.translation.TranslationService;
-import ru.andrey.cleandictionary.data.repository.TranslationRepository;
-import ru.andrey.cleandictionary.model.Translation;
+import ru.andrey.cleandictionary.domain.global.TranslationRepository;
+import ru.andrey.cleandictionary.domain.global.TranslationService;
+import ru.andrey.cleandictionary.domain.model.Translation;
 
 public class TranslationInteractorImpl implements TranslationInteractor {
 
@@ -19,7 +19,8 @@ public class TranslationInteractorImpl implements TranslationInteractor {
     @Override
     public Single<Translation> getTranslation(Translation translation) {
         checkModel(translation);
-        return mTranslationService.getTranslation(translation);
+        return mTranslationService.getTranslation(translation)
+                .subscribeOn(Schedulers.io());
     }
 
     private void checkModel(Translation translation) {

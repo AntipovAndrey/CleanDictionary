@@ -1,7 +1,7 @@
-package ru.andrey.cleandictionary.domain.translation;
+package ru.andrey.cleandictionary.domain.interactor.translation;
 
 import io.reactivex.Single;
-import ru.andrey.cleandictionary.model.Translation;
+import ru.andrey.cleandictionary.domain.model.Translation;
 
 public interface TranslationInteractor {
     /**

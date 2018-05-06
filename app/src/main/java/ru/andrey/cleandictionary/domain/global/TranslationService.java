@@ -1,8 +1,7 @@
-package ru.andrey.cleandictionary.data.network.translation;
+package ru.andrey.cleandictionary.domain.global;
 
 import io.reactivex.Single;
-import ru.andrey.cleandictionary.model.Translation;
-
+import ru.andrey.cleandictionary.domain.model.Translation;
 
 public interface TranslationService {
 

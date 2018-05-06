@@ -3,17 +3,14 @@ package ru.andrey.cleandictionary.data.network.translation;
 import java.io.IOException;
 
 import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import ru.andrey.cleandictionary.model.Translation;
-import ru.andrey.cleandictionary.model.TranslationResponseModel;
-
+import ru.andrey.cleandictionary.data.network.model.TranslationResponseModel;
+import ru.andrey.cleandictionary.domain.global.TranslationService;
+import ru.andrey.cleandictionary.domain.model.Translation;
 
 public class YandexTranslate implements TranslationService {
-
-
     private static final String API_KEY =
             "trnsl.1.1.20180324T165001Z.898f85a4f411b333.ea8deb61604ca18ca90d6dd7fe5acda46980f77b";
 
@@ -32,10 +29,8 @@ public class YandexTranslate implements TranslationService {
 
     @Override
     public Single<Translation> getTranslation(Translation word) {
-        return Single.defer(() -> {
-            doTranslation(word);
-            return Single.just(word);
-        }).subscribeOn(Schedulers.io());
+        return Single.just(word)
+                .doOnSuccess(this::doTranslation);
     }
 
     private void doTranslation(Translation word) throws IOException {

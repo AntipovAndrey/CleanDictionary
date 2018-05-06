@@ -4,10 +4,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.andrey.cleandictionary.data.network.translation.TranslationService;
 import ru.andrey.cleandictionary.data.network.translation.YandexTranslate;
 import ru.andrey.cleandictionary.data.repository.InMemoryRepository;
-import ru.andrey.cleandictionary.data.repository.TranslationRepository;
+import ru.andrey.cleandictionary.domain.global.TranslationRepository;
+import ru.andrey.cleandictionary.domain.global.TranslationService;
 
 @Module
 public class AppModule {
@@ -23,5 +23,4 @@ public class AppModule {
 	TranslationService providesTranslationService() {
 		return new YandexTranslate();
 	}
-
 }

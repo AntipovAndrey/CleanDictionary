@@ -1,11 +1,11 @@
-package ru.andrey.cleandictionary.domain.translation;
+package ru.andrey.cleandictionary.domain.interactor.translationlist;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
-import ru.andrey.cleandictionary.data.repository.TranslationRepository;
-import ru.andrey.cleandictionary.model.Translation;
+import ru.andrey.cleandictionary.domain.global.TranslationRepository;
+import ru.andrey.cleandictionary.domain.model.Translation;
 
 public class TranslationsListInteractorImpl implements TranslationsListInteractor {
 

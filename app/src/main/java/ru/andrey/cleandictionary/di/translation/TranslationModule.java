@@ -2,14 +2,14 @@ package ru.andrey.cleandictionary.di.translation;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.andrey.cleandictionary.data.network.translation.TranslationService;
-import ru.andrey.cleandictionary.data.repository.TranslationRepository;
-import ru.andrey.cleandictionary.domain.translation.FavoriteTranslationInteractor;
-import ru.andrey.cleandictionary.domain.translation.FavoriteTranslationInteractorImpl;
-import ru.andrey.cleandictionary.domain.translation.TranslationInteractor;
-import ru.andrey.cleandictionary.domain.translation.TranslationInteractorImpl;
-import ru.andrey.cleandictionary.domain.translation.TranslationsListInteractor;
-import ru.andrey.cleandictionary.domain.translation.TranslationsListInteractorImpl;
+import ru.andrey.cleandictionary.domain.global.TranslationRepository;
+import ru.andrey.cleandictionary.domain.global.TranslationService;
+import ru.andrey.cleandictionary.domain.interactor.favorite.FavoriteTranslationInteractor;
+import ru.andrey.cleandictionary.domain.interactor.favorite.FavoriteTranslationInteractorImpl;
+import ru.andrey.cleandictionary.domain.interactor.translation.TranslationInteractor;
+import ru.andrey.cleandictionary.domain.interactor.translation.TranslationInteractorImpl;
+import ru.andrey.cleandictionary.domain.interactor.translationlist.TranslationsListInteractor;
+import ru.andrey.cleandictionary.domain.interactor.translationlist.TranslationsListInteractorImpl;
 
 @Module
 public class TranslationModule {
@@ -33,5 +33,4 @@ public class TranslationModule {
     TranslationsListInteractor provideTranslationsListInteractor(TranslationRepository repository) {
         return new TranslationsListInteractorImpl(repository);
     }
-
 }

@@ -4,8 +4,8 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.andrey.cleandictionary.App;
-import ru.andrey.cleandictionary.domain.translation.FavoriteTranslationInteractor;
-import ru.andrey.cleandictionary.model.Translation;
+import ru.andrey.cleandictionary.domain.interactor.favorite.FavoriteTranslationInteractor;
+import ru.andrey.cleandictionary.domain.model.Translation;
 import ru.andrey.cleandictionary.presentation.view.WordView;
 
 public class DictionaryItemPresenter {

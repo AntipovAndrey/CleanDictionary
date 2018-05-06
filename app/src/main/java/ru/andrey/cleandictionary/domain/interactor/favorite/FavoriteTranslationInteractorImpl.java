@@ -1,8 +1,9 @@
-package ru.andrey.cleandictionary.domain.translation;
+package ru.andrey.cleandictionary.domain.interactor.favorite;
 
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
-import ru.andrey.cleandictionary.model.Translation;
+import ru.andrey.cleandictionary.domain.interactor.translation.TranslationInteractor;
+import ru.andrey.cleandictionary.domain.model.Translation;
 
 public class FavoriteTranslationInteractorImpl implements FavoriteTranslationInteractor {
 

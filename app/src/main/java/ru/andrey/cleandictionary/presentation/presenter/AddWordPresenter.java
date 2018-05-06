@@ -6,8 +6,8 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.andrey.cleandictionary.App;
-import ru.andrey.cleandictionary.domain.translation.TranslationInteractor;
-import ru.andrey.cleandictionary.model.Translation;
+import ru.andrey.cleandictionary.domain.interactor.translation.TranslationInteractor;
+import ru.andrey.cleandictionary.domain.model.Translation;
 import ru.andrey.cleandictionary.presentation.view.AddWordView;
 
 

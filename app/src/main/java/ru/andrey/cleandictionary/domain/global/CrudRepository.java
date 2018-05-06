@@ -1,4 +1,4 @@
-package ru.andrey.cleandictionary.data.repository;
+package ru.andrey.cleandictionary.domain.global;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;

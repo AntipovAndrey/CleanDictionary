@@ -1,4 +1,4 @@
-package ru.andrey.cleandictionary.model;
+package ru.andrey.cleandictionary.domain.model;
 
 
 public enum Language {
