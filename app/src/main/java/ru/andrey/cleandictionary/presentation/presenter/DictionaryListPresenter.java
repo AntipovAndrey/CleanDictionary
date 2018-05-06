@@ -33,6 +33,7 @@ public class DictionaryListPresenter {
 
     public Observable<DictionaryItemPresenter> getList() {
         return mInteractor.getTranslations()
+                .map(DictionaryItemPresenter::new)
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

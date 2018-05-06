@@ -1,8 +1,15 @@
 package ru.andrey.cleandictionary.domain.translation;
 
 import io.reactivex.Observable;
-import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
+import ru.andrey.cleandictionary.model.Translation;
 
 public interface TranslationsListInteractor {
-    Observable<DictionaryItemPresenter> getTranslations();
+    /**
+     * Fetches models from repository
+     * <p>
+     * Subscribed on Schedulers.io()
+     *
+     * @return Observable of fetched translation
+     */
+    Observable<Translation> getTranslations();
 }

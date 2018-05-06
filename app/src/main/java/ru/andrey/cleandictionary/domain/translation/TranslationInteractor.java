@@ -4,7 +4,23 @@ import io.reactivex.Single;
 import ru.andrey.cleandictionary.model.Translation;
 
 public interface TranslationInteractor {
+    /**
+     * Returns Single with model which is carried translation
+     * <p>
+     * Subscribed on Schedulers.io()
+     *
+     * @param translation model to be translated
+     * @return Single of model wuth translation
+     */
     Single<Translation> getTranslation(Translation translation);
 
-    Single<Translation> saveWord(Translation t);
+    /**
+     * Returns Single with saved word
+     * <p>
+     * Subscribed on Schedulers.io()
+     *
+     * @param translation model to be saved
+     * @return Single of saved model
+     */
+    Single<Translation> saveWord(Translation translation);
 }

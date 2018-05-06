@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 import ru.andrey.cleandictionary.data.repository.TranslationRepository;
-import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
+import ru.andrey.cleandictionary.model.Translation;
 
 public class TranslationsListInteractorImpl implements TranslationsListInteractor {
 
@@ -17,9 +17,8 @@ public class TranslationsListInteractorImpl implements TranslationsListInteracto
     }
 
     @Override
-    public Observable<DictionaryItemPresenter> getTranslations() {
+    public Observable<Translation> getTranslations() {
         return mRepository.getAll()
-                .map(DictionaryItemPresenter::new)
                 .subscribeOn(Schedulers.io());
     }
 }
