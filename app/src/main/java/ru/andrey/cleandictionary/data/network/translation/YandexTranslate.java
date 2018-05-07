@@ -11,10 +11,8 @@ import ru.andrey.cleandictionary.domain.global.TranslationService;
 import ru.andrey.cleandictionary.domain.model.Translation;
 
 public class YandexTranslate implements TranslationService {
-    private static final String API_KEY =
-            "trnsl.1.1.20180324T165001Z.898f85a4f411b333.ea8deb61604ca18ca90d6dd7fe5acda46980f77b";
-
     private static final String BASE_URL = "https://translate.yandex.net/";
+    private final String mApiKey;
 
     private static YandexApi sApi;
     private static Retrofit sRetrofit;
@@ -27,6 +25,10 @@ public class YandexTranslate implements TranslationService {
         sApi = sRetrofit.create(YandexApi.class);
     }
 
+    public YandexTranslate(String apiKey) {
+        mApiKey = apiKey;
+    }
+
     @Override
     public Single<Translation> getTranslation(Translation word) {
         return Single.just(word)
@@ -36,7 +38,7 @@ public class YandexTranslate implements TranslationService {
     private void doTranslation(Translation word) throws IOException {
         final String langCodesFromTo =
                 word.getLanguageFrom().getLanguageCode() + "-" + word.getLanguageTo().getLanguageCode();
-        Response<TranslationResponseModel> response = sApi.getData(API_KEY,
+        Response<TranslationResponseModel> response = sApi.getData(mApiKey,
                 word.getWord(),
                 langCodesFromTo).execute();
         final TranslationResponseModel body = response.body();

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import ru.andrey.cleandictionary.di.app.AppComponent;
 import ru.andrey.cleandictionary.di.app.AppModule;
+import ru.andrey.cleandictionary.di.app.BuildConfigModule;
 import ru.andrey.cleandictionary.di.app.DaggerAppComponent;
 import ru.andrey.cleandictionary.di.translation.DaggerTranslationComponent;
 import ru.andrey.cleandictionary.di.translation.TranslationComponent;
@@ -24,6 +25,7 @@ public class App extends Application {
 		if (mAppComponent == null) {
 			mAppComponent = DaggerAppComponent.builder()
 					.appModule(new AppModule())
+					.buildConfigModule(new BuildConfigModule(BuildConfig.YANDEX_API_KEY))
 					.build();
 		}
 		return mAppComponent;
