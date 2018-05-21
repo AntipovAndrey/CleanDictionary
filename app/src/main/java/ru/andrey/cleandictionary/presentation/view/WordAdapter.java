@@ -55,8 +55,8 @@ public class WordAdapter extends RecyclerView.Adapter<WordViewHolder> {
 	}
 
 	public void add(DictionaryItemPresenter itemPresenter) {
-		mDictionaryItems.add(0, itemPresenter);
-		notifyDataSetChanged();
+		mDictionaryItems.add( 0, itemPresenter);
+		notifyItemInserted(0);
 	}
 
 	public void reset() {

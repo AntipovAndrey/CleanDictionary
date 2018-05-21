@@ -102,6 +102,7 @@ public class DictionaryListFragment extends Fragment
     @Override
     public void add(DictionaryItemPresenter item) {
         mWordAdapter.add(item);
+        mRecyclerView.smoothScrollToPosition(0);
     }
 
     @Override
