@@ -17,5 +17,7 @@ public interface WordListView extends MvpView {
 
 	void add(DictionaryItemPresenter item);
 
+	void remove(DictionaryItemPresenter item);
+
 	void reset();
 }

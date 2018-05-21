@@ -25,7 +25,6 @@ import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.R;
 import ru.andrey.cleandictionary.di.translation.DaggerTranslationComponent;
 import ru.andrey.cleandictionary.presentation.presenter.AddWordPresenter;
-import rx.functions.Action1;
 
 public class AddWordFragment extends MvpAppCompatFragment
         implements AddWordView {
@@ -49,11 +48,6 @@ public class AddWordFragment extends MvpAppCompatFragment
                 .build()
 				.getAddWordPresenter();
     }
-
-    final Action1<String> mUpdateTranslationAction = string -> {
-        mPresenter.updateTranslation(string);
-    };
-
 
     @Nullable
     @Override
@@ -94,7 +88,7 @@ public class AddWordFragment extends MvpAppCompatFragment
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .map(CharSequence::toString)
                 .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(mUpdateTranslationAction);
+                .subscribe(mPresenter::updateTranslation);
     }
 
     @Override

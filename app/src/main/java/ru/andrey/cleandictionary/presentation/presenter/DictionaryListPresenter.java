@@ -66,4 +66,10 @@ public class DictionaryListPresenter extends MvpPresenter<WordListView> {
     public void menuCreated() {
         getViewState().setFavoriteMenuIcon(mFavoriteEnabled);
     }
+
+    public void clickStar(DictionaryItemPresenter i) {
+        if (mFavoriteEnabled) {
+            getViewState().remove(i);
+        }
+    }
 }

@@ -25,8 +25,7 @@ import ru.andrey.cleandictionary.di.translation.DaggerTranslationComponent;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryListPresenter;
 
-public class DictionaryListFragment extends MvpAppCompatFragment
-        implements WordAdapter.OnItemClickListener, WordListView {
+public class DictionaryListFragment extends MvpAppCompatFragment implements WordListView {
     public static final int WORD_ADDED_CODE = 1337;
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
@@ -65,7 +64,7 @@ public class DictionaryListFragment extends MvpAppCompatFragment
         showProgressBar();
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
-        mWordAdapter = new WordAdapter(DictionaryListFragment.this);
+        mWordAdapter = new WordAdapter(DictionaryListFragment.this::onItemClicked, i -> mListPresenter.clickStar(i));
         mRecyclerView.setAdapter(mWordAdapter);
         showRecyclerView();
         mListPresenter.start();
@@ -114,6 +113,11 @@ public class DictionaryListFragment extends MvpAppCompatFragment
     }
 
     @Override
+    public void remove(DictionaryItemPresenter item) {
+        mWordAdapter.remove(item);
+    }
+
+    @Override
     public void reset() {
         mWordAdapter.reset();
     }
@@ -144,8 +148,7 @@ public class DictionaryListFragment extends MvpAppCompatFragment
         mRecyclerView.setVisibility(View.INVISIBLE);
     }
 
-    @Override
-    public void onClicked(DictionaryItemPresenter item) {
+    public void onItemClicked(DictionaryItemPresenter item) {
         mListPresenter.clickItem(item, getContext());
     }
 }

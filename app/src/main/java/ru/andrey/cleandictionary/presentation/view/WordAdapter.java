@@ -10,15 +10,19 @@ import java.util.List;
 
 import ru.andrey.cleandictionary.R;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
+import ru.andrey.cleandictionary.util.Consumer;
 
 public class WordAdapter extends RecyclerView.Adapter<WordViewHolder> {
 
 	private final List<DictionaryItemPresenter> mDictionaryItems = new ArrayList<>();
-	private final OnItemClickListener mListener;
+	private final Consumer<DictionaryItemPresenter> mItemClickedListener;
+	private final Consumer<DictionaryItemPresenter> mStarClickedListener;
 
-	public WordAdapter(OnItemClickListener listener) {
+	public WordAdapter(Consumer<DictionaryItemPresenter>  itemClickListener,
+					   Consumer<DictionaryItemPresenter> starClicked) {
 		reset();
-		mListener = listener;
+		mItemClickedListener = itemClickListener;
+		mStarClickedListener = starClicked;
 	}
 
 	@Override
@@ -37,8 +41,11 @@ public class WordAdapter extends RecyclerView.Adapter<WordViewHolder> {
 		holder.langFrom.setText(item.getLangFrom());
 		holder.langTo.setText(item.getLangTo());
 		holder.star.setImageResource(getStarImage(item.isFavorite()));
-		holder.star.setOnClickListener(v -> item.starClicked());
-		holder.card.setOnClickListener(v -> mListener.onClicked(item));
+		holder.star.setOnClickListener(v -> {
+			item.starClicked();
+			mStarClickedListener.accept(item);
+		});
+		holder.card.setOnClickListener(v -> mItemClickedListener.accept(item));
 	}
 
 	private int getStarImage(boolean enabled) {
@@ -48,10 +55,6 @@ public class WordAdapter extends RecyclerView.Adapter<WordViewHolder> {
 	@Override
 	public int getItemCount() {
 		return mDictionaryItems.size();
-	}
-
-	public List<DictionaryItemPresenter> getItemList() {
-		return mDictionaryItems;
 	}
 
 	public void add(DictionaryItemPresenter itemPresenter) {
@@ -64,8 +67,11 @@ public class WordAdapter extends RecyclerView.Adapter<WordViewHolder> {
 		notifyDataSetChanged();
 	}
 
-	public interface OnItemClickListener {
-
-		void onClicked(DictionaryItemPresenter item);
+	public void remove(DictionaryItemPresenter item) {
+		final int index = mDictionaryItems.indexOf(item);
+		if (index != -1) {
+			mDictionaryItems.remove(index);
+			notifyItemRangeRemoved(index, 1);
+		}
 	}
 }
