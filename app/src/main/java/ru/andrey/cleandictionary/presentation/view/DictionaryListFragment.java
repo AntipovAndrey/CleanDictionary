@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,26 +14,39 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import java.util.List;
+import com.arellomobile.mvp.MvpAppCompatFragment;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import io.reactivex.disposables.CompositeDisposable;
+import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.R;
+import ru.andrey.cleandictionary.di.translation.DaggerTranslationComponent;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryListPresenter;
 
-public class DictionaryListFragment extends Fragment
+public class DictionaryListFragment extends MvpAppCompatFragment
         implements WordAdapter.OnItemClickListener, WordListView {
     public static final int WORD_ADDED_CODE = 1337;
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
-
-    private DictionaryListPresenter mListPresenter = new DictionaryListPresenter(this);
     private WordAdapter mWordAdapter;
     private MenuItem mFavoriteItem;
 
     public static final String TAG = DictionaryListFragment.class.getSimpleName();
 
     private CompositeDisposable mDisposables;
+
+    @InjectPresenter
+    DictionaryListPresenter mListPresenter;
+
+    @ProvidePresenter
+    DictionaryListPresenter providePresenter() {
+        return DaggerTranslationComponent.builder()
+                .appComponent(App.instance.getAppComponent())
+                .build()
+                .getDictionaryListPresenter();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,39 +65,35 @@ public class DictionaryListFragment extends Fragment
         showProgressBar();
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
+        mWordAdapter = new WordAdapter(DictionaryListFragment.this);
+        mRecyclerView.setAdapter(mWordAdapter);
+        showRecyclerView();
+        mListPresenter.start();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mDisposables = new CompositeDisposable();
-        refreshRecyclerView();
+        if (mDisposables == null) {
+			mDisposables = new CompositeDisposable();
+		}
     }
 
-    private void refreshRecyclerView() {
-        mDisposables.add(
-                mListPresenter.getList()
-                        .doOnSubscribe(ignored -> {
-                            mWordAdapter = new WordAdapter(DictionaryListFragment.this);
-                            showRecyclerView();
-                            mRecyclerView.setAdapter(mWordAdapter);
-                        })
-                        .subscribe(this::add));
-    }
 
 
     @Override
     public void onStop() {
         super.onStop();
         mDisposables.dispose();
+        mDisposables = null;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main_menu, menu);
         mFavoriteItem = menu.getItem(0);
-        setFavoriteMenuIcon(false);
+        mListPresenter.menuCreated();
     }
 
     @Override
@@ -114,7 +122,7 @@ public class DictionaryListFragment extends Fragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == WORD_ADDED_CODE) {
-            refreshRecyclerView();
+            mListPresenter.wordAdded();
         }
     }
 
@@ -139,10 +147,5 @@ public class DictionaryListFragment extends Fragment
     @Override
     public void onClicked(DictionaryItemPresenter item) {
         mListPresenter.clickItem(item, getContext());
-    }
-
-    @Override
-    public List<DictionaryItemPresenter> getListFromAdapter() {
-        return mWordAdapter.getItemList();
     }
 }

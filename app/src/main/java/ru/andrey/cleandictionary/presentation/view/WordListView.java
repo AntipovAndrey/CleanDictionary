@@ -2,14 +2,14 @@ package ru.andrey.cleandictionary.presentation.view;
 
 import android.app.Activity;
 
-import java.util.List;
+import com.arellomobile.mvp.MvpView;
+import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
 
-
-public interface WordListView {
-
-	List<DictionaryItemPresenter> getListFromAdapter();
+@StateStrategyType(OneExecutionStateStrategy.class)
+public interface WordListView extends MvpView {
 
 	void setFavoriteMenuIcon(boolean activate);
 

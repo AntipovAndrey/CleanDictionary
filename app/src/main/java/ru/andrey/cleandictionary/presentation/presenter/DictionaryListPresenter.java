@@ -2,39 +2,41 @@ package ru.andrey.cleandictionary.presentation.presenter;
 
 import android.content.Context;
 
+import com.arellomobile.mvp.InjectViewState;
+import com.arellomobile.mvp.MvpPresenter;
+
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.domain.interactor.translationlist.TranslationsListInteractor;
 import ru.andrey.cleandictionary.presentation.view.AddWordActivity;
 import ru.andrey.cleandictionary.presentation.view.WordListView;
 
-
-public class DictionaryListPresenter {
+@InjectViewState
+public class DictionaryListPresenter extends MvpPresenter<WordListView> {
 
     @Inject
     TranslationsListInteractor mInteractor;
 
-    private WordListView mWordListView;
     private boolean mFavoriteEnabled;
 
     private Disposable mDisposable;
 
-    {
-        App.instance.getTranslationComponent().inject(this);
+    @Inject
+    public DictionaryListPresenter() {
     }
 
-    public DictionaryListPresenter(WordListView wordListView) {
-        mWordListView = wordListView;
-    }
-
-    public Observable<DictionaryItemPresenter> getList() {
-        return mInteractor.getTranslations()
+    private void populateList() {
+        mDisposable = mInteractor.getTranslations()
+                .filter(t -> !mFavoriteEnabled || t.isFavorite())
                 .map(DictionaryItemPresenter::new)
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::add);
+    }
+
+    public void start() {
+        populateList();
     }
 
     public void clickItem(DictionaryItemPresenter item, Context context) {
@@ -47,23 +49,21 @@ public class DictionaryListPresenter {
             mDisposable.dispose();
         }
 
-        Observable<DictionaryItemPresenter> itemsObservable = getList()
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(ignored -> {
-                    mWordListView.setFavoriteMenuIcon(mFavoriteEnabled);
-                    mWordListView.reset();
-                });
-
-        if (mFavoriteEnabled) {
-            itemsObservable = itemsObservable
-                    .filter(DictionaryItemPresenter::isFavorite);
-        }
-
-        mDisposable = itemsObservable
-                .subscribe(mWordListView::add);
+        getViewState().setFavoriteMenuIcon(mFavoriteEnabled);
+        getViewState().reset();
+        populateList();
     }
 
     public void addWord() {
-        mWordListView.startActivity(AddWordActivity.class);
+        getViewState().startActivity(AddWordActivity.class);
+    }
+
+    public void wordAdded() {
+        getViewState().reset();
+        populateList();
+    }
+
+    public void menuCreated() {
+        getViewState().setFavoriteMenuIcon(mFavoriteEnabled);
     }
 }

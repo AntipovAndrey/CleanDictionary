@@ -50,4 +50,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     // Gson
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.arello-mobile:moxy:1.5.3'
+    annotationProcessor 'com.arello-mobile:moxy-compiler:1.5.3'
+    implementation 'com.arello-mobile:moxy-app-compat:1.5.3'
 }

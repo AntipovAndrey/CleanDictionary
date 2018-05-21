@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +13,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arellomobile.mvp.MvpAppCompatFragment;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.concurrent.TimeUnit;
 
+import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.R;
+import ru.andrey.cleandictionary.di.translation.DaggerTranslationComponent;
 import ru.andrey.cleandictionary.presentation.presenter.AddWordPresenter;
 import rx.functions.Action1;
 
-public class AddWordFragment extends Fragment
+public class AddWordFragment extends MvpAppCompatFragment
         implements AddWordView {
 
     @LayoutRes
@@ -35,7 +39,16 @@ public class AddWordFragment extends Fragment
     private Spinner mLangFromSpinner;
     private Spinner mLangToSpinner;
 
-    AddWordPresenter mPresenter = new AddWordPresenter();
+    @InjectPresenter
+    AddWordPresenter mPresenter;
+
+    @ProvidePresenter
+    AddWordPresenter providePresenter() {
+        return DaggerTranslationComponent.builder()
+				.appComponent(App.instance.getAppComponent())
+                .build()
+				.getAddWordPresenter();
+    }
 
     final Action1<String> mUpdateTranslationAction = string -> {
         mPresenter.updateTranslation(string);
@@ -69,7 +82,6 @@ public class AddWordFragment extends Fragment
         mPresenter.setLangTo(items[1]);
 
         mAddButton.setOnClickListener(v -> mPresenter.addWord());
-        mPresenter.setView(this);
         return view;
     }
 
