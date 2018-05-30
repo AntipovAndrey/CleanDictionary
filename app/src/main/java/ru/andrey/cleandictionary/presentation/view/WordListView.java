@@ -6,7 +6,7 @@ import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
-import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
+import ru.andrey.cleandictionary.domain.model.Translation;
 
 @StateStrategyType(OneExecutionStateStrategy.class)
 public interface WordListView extends MvpView {
@@ -15,9 +15,11 @@ public interface WordListView extends MvpView {
 
 	void startActivity(Class<? extends Activity> classActivity);
 
-	void add(DictionaryItemPresenter item);
+	void add(Translation item);
 
-	void remove(DictionaryItemPresenter item);
+	void updateTranslation(Translation translation, int index);
+
+	void remove(Translation item);
 
 	void reset();
 }

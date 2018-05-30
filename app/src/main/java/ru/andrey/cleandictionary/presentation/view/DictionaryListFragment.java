@@ -22,19 +22,19 @@ import io.reactivex.disposables.CompositeDisposable;
 import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.R;
 import ru.andrey.cleandictionary.di.translation.DaggerTranslationComponent;
-import ru.andrey.cleandictionary.presentation.presenter.DictionaryItemPresenter;
+import ru.andrey.cleandictionary.domain.model.Translation;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryListPresenter;
 
 public class DictionaryListFragment extends MvpAppCompatFragment implements WordListView {
     public static final int WORD_ADDED_CODE = 1337;
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
-    private WordAdapter mWordAdapter;
+
     private MenuItem mFavoriteItem;
 
-    public static final String TAG = DictionaryListFragment.class.getSimpleName();
-
     private CompositeDisposable mDisposables;
+
+    WordAdapter mWordAdapter;
 
     @InjectPresenter
     DictionaryListPresenter mListPresenter;
@@ -64,7 +64,7 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
         showProgressBar();
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
-        mWordAdapter = new WordAdapter(DictionaryListFragment.this::onItemClicked, i -> mListPresenter.clickStar(i));
+        mWordAdapter = new WordAdapter(mListPresenter::clickStar);
         mRecyclerView.setAdapter(mWordAdapter);
         showRecyclerView();
         mListPresenter.start();
@@ -78,8 +78,6 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
 			mDisposables = new CompositeDisposable();
 		}
     }
-
-
 
     @Override
     public void onStop() {
@@ -107,13 +105,13 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
     }
 
     @Override
-    public void add(DictionaryItemPresenter item) {
+    public void add(Translation item) {
         mWordAdapter.add(item);
         mRecyclerView.smoothScrollToPosition(0);
     }
 
     @Override
-    public void remove(DictionaryItemPresenter item) {
+    public void remove(Translation item) {
         mWordAdapter.remove(item);
     }
 
@@ -122,7 +120,12 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
         mWordAdapter.reset();
     }
 
-    @Override
+	@Override
+	public void updateTranslation(Translation translation, int index) {
+		mWordAdapter.replace(translation, index);
+	}
+
+	@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == WORD_ADDED_CODE) {
@@ -146,9 +149,5 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
     private void showProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.INVISIBLE);
-    }
-
-    public void onItemClicked(DictionaryItemPresenter item) {
-        mListPresenter.clickItem(item, getContext());
     }
 }

@@ -16,11 +16,13 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.jakewharton.rxbinding.widget.RxAdapterView;
-import com.jakewharton.rxbinding.widget.RxTextView;
+import com.jakewharton.rxbinding2.widget.RxAdapterView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.R;
 import ru.andrey.cleandictionary.di.translation.DaggerTranslationComponent;
@@ -37,6 +39,8 @@ public class AddWordFragment extends MvpAppCompatFragment
     private FloatingActionButton mAddButton;
     private Spinner mLangFromSpinner;
     private Spinner mLangToSpinner;
+
+    private CompositeDisposable mCompositeDisposable;
 
     @InjectPresenter
     AddWordPresenter mPresenter;
@@ -61,14 +65,15 @@ public class AddWordFragment extends MvpAppCompatFragment
 
 
         String[] items = getResources().getStringArray(R.array.languages_spinner_items);
+        mCompositeDisposable.addAll(
+			RxAdapterView.itemSelections(mLangFromSpinner)
+					.subscribeOn(AndroidSchedulers.mainThread())
+					.subscribe(i -> mPresenter.setLangFrom(items[i])),
 
-        RxAdapterView.itemSelections(mLangFromSpinner)
-                .subscribeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(i -> mPresenter.setLangFrom(items[i]));
-
-        RxAdapterView.itemSelections(mLangToSpinner)
-                .subscribeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(i -> mPresenter.setLangTo(items[i]));
+			RxAdapterView.itemSelections(mLangToSpinner)
+					.subscribeOn(AndroidSchedulers.mainThread())
+					.subscribe(i -> mPresenter.setLangTo(items[i]))
+		);
 
         mLangFromSpinner.setSelection(0);
         mLangToSpinner.setSelection(1);
@@ -79,16 +84,31 @@ public class AddWordFragment extends MvpAppCompatFragment
         return view;
     }
 
-    @Override
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mCompositeDisposable = new CompositeDisposable();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (mCompositeDisposable != null) {
+			mCompositeDisposable.dispose();
+			mCompositeDisposable = null;
+		}
+	}
+
+	@Override
     public void onStart() {
         super.onStart();
 
-        RxTextView.textChanges(mWordEditText)
+       mCompositeDisposable.add(RxTextView.textChanges(mWordEditText)
                 .filter(charSequence -> charSequence.length() > 1)
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .map(CharSequence::toString)
-                .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe(mPresenter::updateTranslation);
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mPresenter::updateTranslation));
     }
 
     @Override
