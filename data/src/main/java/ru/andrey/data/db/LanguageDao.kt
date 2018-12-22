@@ -1,6 +1,8 @@
 package ru.andrey.data.db
 
 import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import ru.andrey.data.db.entity.LanguageData
 
@@ -12,4 +14,7 @@ interface LanguageDao {
 
     @Query("SELECT * FROM languages WHERE id=:id")
     fun findById(id: Int): LanguageData?
+
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    fun save(data: LanguageData)
 }

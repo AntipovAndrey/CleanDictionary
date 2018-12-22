@@ -13,5 +13,5 @@ interface TranslationRepository {
 
     fun update(item: Translation): Single<Translation>
 
-//  fun deleteById(id: Int): Completable
+    fun initLanguages(vararg langs: String)
 }

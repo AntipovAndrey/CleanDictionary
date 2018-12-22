@@ -102,8 +102,7 @@ public class AddWordFragment extends MvpAppCompatFragment implements AddWordView
         super.onStart();
 
         mCompositeDisposable.add(RxTextView.textChanges(mWordEditText)
-                .filter(charSequence -> charSequence.length() > 1)
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .debounce(100, TimeUnit.MILLISECONDS)
                 .map(CharSequence::toString)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mPresenter::updateTranslation));

@@ -2,6 +2,8 @@ package ru.andrey.cleandictionary
 
 import android.app.Activity
 import android.app.Application
+import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 import ru.andrey.cleandictionary.di.ApplicationComponent
 import ru.andrey.cleandictionary.di.ApplicationModule
 import ru.andrey.cleandictionary.di.DaggerApplicationComponent
@@ -24,5 +26,14 @@ class App : Application() {
                 .applicationComponent(appComponent)
                 .translationDataModule(TranslationDataModule("https://translate.yandex.net/", BuildConfig.YANDEX_API_KEY))
                 .build()
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        val repo = translationComponent.translationRepository()
+
+        Completable.fromAction { repo.initLanguages("ru", "en", "fi") }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
     }
 }

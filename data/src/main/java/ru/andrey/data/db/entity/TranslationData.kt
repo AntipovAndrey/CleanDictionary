@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey
 @Entity(tableName = "translations")
 data class TranslationData(
 
-        @PrimaryKey
+        @PrimaryKey(autoGenerate = true)
         var id: Int,
         var word: String,
         var translation: String,

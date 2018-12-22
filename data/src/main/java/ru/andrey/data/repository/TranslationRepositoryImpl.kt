@@ -3,6 +3,7 @@ package ru.andrey.data.repository
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.andrey.data.db.TranslationDatabase
+import ru.andrey.data.db.entity.LanguageData
 import ru.andrey.data.db.entity.TranslationData
 import ru.andrey.domain.model.Language
 import ru.andrey.domain.model.Translation
@@ -34,6 +35,12 @@ class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepo
         return insert(item) {
             dao.update(it)
             it.id
+        }
+    }
+
+    override fun initLanguages(vararg langs: String) {
+        langs.forEach {
+            languageDao.save(LanguageData(0, it))
         }
     }
 
