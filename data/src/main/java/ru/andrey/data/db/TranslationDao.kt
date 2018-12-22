@@ -6,7 +6,7 @@ import ru.andrey.data.db.entity.TranslationData
 @Dao
 interface TranslationDao {
 
-    @Query("SELECT * FROM translations")
+    @Query("SELECT * FROM translations ORDER BY id DESC")
     fun getAll(): List<TranslationData>
 
     @Query("SELECT * FROM translations WHERE id=:id")

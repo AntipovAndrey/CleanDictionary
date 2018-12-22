@@ -20,6 +20,7 @@ public class WordAdapter extends ListAdapter<TranslationDto, WordAdapter.Holder>
 
     public WordAdapter(ItemClicked itemClicked) {
         super(DIFF_CALLBACK);
+
         mItemClicked = itemClicked;
     }
 

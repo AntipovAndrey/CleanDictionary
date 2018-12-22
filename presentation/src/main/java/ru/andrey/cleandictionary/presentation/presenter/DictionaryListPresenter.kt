@@ -6,7 +6,6 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import ru.andrey.cleandictionary.presentation.dto.TranslationDto
-import ru.andrey.cleandictionary.presentation.dto.WordDto
 import ru.andrey.cleandictionary.presentation.view.AddWordActivity
 import ru.andrey.cleandictionary.presentation.view.WordListView
 import ru.andrey.domain.interactor.FavoriteInteractor
@@ -20,11 +19,7 @@ constructor(private val listInteracotor: TranslationsListInteractor,
 
     private var mFavoriteEnabled: Boolean = false
 
-    private val mDisposables: CompositeDisposable
-
-    init {
-        mDisposables = CompositeDisposable()
-    }
+    private val mDisposables: CompositeDisposable = CompositeDisposable()
 
     private fun populateList() {
         mDisposables.add(listInteracotor.getTranslations()
@@ -36,16 +31,7 @@ constructor(private val listInteracotor: TranslationsListInteractor,
                         true
                     }
                 }
-                .map {
-                    TranslationDto(
-                            id = it.id!!,
-                            translation = it.translation,
-                            favorite = it.favorite,
-                            word = WordDto(it.word,
-                                    it.languageFrom.languageCode,
-                                    it.languageTo.languageCode)
-                    )
-                }
+                .map { TranslationDto.fromModel(it) }
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { all -> viewState.show(all) })
