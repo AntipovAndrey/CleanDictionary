@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey
 data class TranslationData(
 
         @PrimaryKey(autoGenerate = true)
-        var id: Int,
+        var id: Int = 0,
         var word: String,
         var translation: String,
         var from: Int,

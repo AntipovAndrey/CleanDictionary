@@ -8,6 +8,6 @@ import android.arch.persistence.room.PrimaryKey
 data class LanguageData(
 
         @PrimaryKey(autoGenerate = true)
-        var id: Int,
+        var id: Int = 0,
         var code: String
 )

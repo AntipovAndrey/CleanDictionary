@@ -15,6 +15,6 @@ interface LanguageDao {
     @Query("SELECT * FROM languages WHERE id=:id")
     fun findById(id: Int): LanguageData?
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun save(data: LanguageData)
 }

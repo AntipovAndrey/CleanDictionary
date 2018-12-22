@@ -15,18 +15,19 @@ class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepo
     private val languageDao = dataBase.languageDao()
 
     override fun getAll(): Single<List<Translation>> {
-        return Observable.fromIterable(dao.getAll())
+        return Observable.defer { Observable.fromIterable(dao.getAll()) }
                 .map(::toModel)
                 .toList()
     }
 
     override fun findById(id: Int): Single<Translation> {
-        return Single.just(dao.findById(id))
+        return Single.fromCallable { dao.findById(id) }
                 .map(::toModel)
     }
 
     override fun save(item: Translation): Single<Translation> {
         return insert(item) {
+            it.id = 0
             dao.save(it).toInt()
         }
     }
@@ -66,7 +67,7 @@ class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepo
 
     private fun toDto(model: Translation): TranslationData {
         return TranslationData(
-                id = model.id ?: -1,
+                id = model.id ?: 0,
                 word = model.word,
                 translation = model.translation,
                 from = languageDao.findByCode(model.languageFrom.languageCode)!!.id,

@@ -12,7 +12,7 @@ interface TranslationDao {
     @Query("SELECT * FROM translations WHERE id=:id")
     fun findById(id: Int): TranslationData?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     fun save(item: TranslationData): Long
 
     @Update(onConflict = OnConflictStrategy.REPLACE)

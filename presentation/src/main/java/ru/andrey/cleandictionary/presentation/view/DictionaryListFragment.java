@@ -18,9 +18,12 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
+import java.util.List;
+
 import io.reactivex.disposables.CompositeDisposable;
 import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.R;
+import ru.andrey.cleandictionary.presentation.dto.TranslationDto;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryListPresenter;
 import ru.andrey.domain.model.Translation;
 
@@ -104,24 +107,19 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
     }
 
     @Override
-    public void add(Translation item) {
-        mWordAdapter.add(item);
-        mRecyclerView.smoothScrollToPosition(0);
+    public void show(List<TranslationDto> items) {
+        mWordAdapter.submitList(items);
     }
 
     @Override
     public void remove(Translation item) {
-        mWordAdapter.remove(item);
+//        mWordAdapter.remove(item);
     }
 
-    @Override
-    public void reset() {
-        mWordAdapter.reset();
-    }
 
     @Override
     public void updateTranslation(Translation translation, int index) {
-        mWordAdapter.replace(translation, index);
+//        mWordAdapter.replace(translation, index);
     }
 
     @Override
