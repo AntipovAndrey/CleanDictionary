@@ -109,6 +109,10 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
     @Override
     public void show(List<TranslationDto> items) {
         mWordAdapter.submitList(items);
+        mRecyclerView.scrollToPosition(0);
+        mRecyclerView.post(() -> {
+            mRecyclerView.smoothScrollToPosition(0);
+        });
     }
 
     @Override

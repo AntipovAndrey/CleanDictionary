@@ -38,7 +38,7 @@ public class WordAdapter extends ListAdapter<TranslationDto, WordAdapter.Holder>
         holder.header.setText(item.getWord().getWord());
         holder.traslation.setText(item.getTranslation());
         holder.langFrom.setText(item.getWord().getFrom());
-        holder.langTo.setText(item.getId() + ""/*item.getWord().getTo()*/);
+        holder.langTo.setText(item.getWord().getTo());
         holder.star.setImageResource(getStarImage(item.getFavorite()));
 
         holder.star.setOnClickListener(v -> mItemClicked.onStarClicked(item, position));
