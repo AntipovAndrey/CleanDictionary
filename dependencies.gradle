@@ -1,0 +1,38 @@
+ext {
+    // Android
+    minSdkVersion = 21
+    targetSdkVersion = 27
+    compileSdkVersion = 27
+    testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+
+    // Libs
+    androidSupportLibVersion = "27.0.2"
+
+    roomVersion = "1.1.1"
+    room = "android.arch.persistence.room:runtime:$roomVersion"
+    roomCompiler = "android.arch.persistence.room:compiler:$roomVersion"
+
+    rxJava = "io.reactivex.rxjava2:rxjava:2.1.6"
+
+    daggerVersion = "2.13"
+    dagger = "com.google.dagger:dagger:$daggerVersion"
+    daggerCompiler = "com.google.dagger:dagger-compiler:$daggerVersion"
+
+    retrofitVersion = "2.3.0"
+    retrofit = "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    retrofitGsonConverter = "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    retrofitRxJava2Adapter = "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+
+    moxyVersion = "1.5.3"
+    moxy = "com.arello-mobile:moxy:$moxyVersion"
+    moxyCompiler = "com.arello-mobile:moxy-compiler:$moxyVersion"
+    moxyCompat = "com.arello-mobile:moxy-app-compat:$moxyVersion"
+
+    // Kotlin
+    kotlinVersion = '1.2.70'
+
+    // Testing
+    junit = "junit:junit:4.12"
+    mockito = "org.mockito:mockito-core:2.8.47"
+    androidTestRunner = "com.android.support.test:runner:1.0.1"
+}

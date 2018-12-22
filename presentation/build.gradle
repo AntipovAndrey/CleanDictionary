@@ -1,0 +1,77 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "ru.andrey.cleandictionary"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "YANDEX_API_KEY", "\"${yandex_translator_api_key}\""
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation "com.android.support:appcompat-v7:$androidSupportLibVersion"
+    implementation "com.android.support:recyclerview-v7:$androidSupportLibVersion"
+    implementation "com.android.support:design:$androidSupportLibVersion"
+    implementation "com.android.support:cardview-v7:$androidSupportLibVersion"
+    implementation "com.android.support.constraint:constraint-layout:1.1.3"
+    implementation "com.android.support:recyclerview-v7:$androidSupportLibVersion"
+    implementation "com.android.support:cardview-v7:$androidSupportLibVersion"
+    implementation "com.android.support:design:$androidSupportLibVersion"
+
+    // Dependency Injection
+    kapt rootProject.ext.daggerCompiler
+    implementation rootProject.ext.dagger
+
+    //  Rx dependencies
+    implementation rootProject.ext.rxJava
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-design:2.1.1'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.1.1'
+
+    // Retrofit
+    implementation rootProject.ext.retrofit
+    implementation rootProject.ext.retrofitRxJava2Adapter
+
+    // Gson
+    implementation rootProject.ext.retrofitGsonConverter
+
+    // Moxy
+    implementation rootProject.ext.moxy
+    kapt rootProject.ext.moxyCompiler
+    implementation rootProject.ext.moxyCompat
+
+    // Room
+    implementation rootProject.ext.room
+
+    implementation project(':data')
+    implementation project(':domain')
+}
+repositories {
+    mavenCentral()
+}
