@@ -1,5 +1,6 @@
 package ru.andrey.domain.interactor
 
+import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import ru.andrey.domain.model.Translation
@@ -34,6 +35,16 @@ class TranslationsListInteractor(private val ioScheduler: Scheduler,
      */
     fun getTranslations(): Single<List<Translation>> {
         return translationRepository.getAll()
+                .subscribeOn(ioScheduler)
+    }
+
+    /**
+     * Deletes item matches id
+     *
+     * @param id of item
+     */
+    fun deleteWord(id: Int): Completable {
+        return translationRepository.delete(id)
                 .subscribeOn(ioScheduler)
     }
 }

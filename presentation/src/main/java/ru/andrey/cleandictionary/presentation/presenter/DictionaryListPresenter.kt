@@ -30,10 +30,17 @@ constructor(private val listInteracotor: TranslationsListInteractor,
         viewState.setFavoriteMenuIcon(mFavoriteEnabled)
     }
 
-    fun clickStar(item: TranslationDto) {
-        mDisposables.add(favoriteInteractor.toggleFavorite(item.id)
+    fun clickStar(id: Int) {
+        favoriteInteractor.toggleFavorite(id)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { any -> repopulateSubject.onNext(any) })
+                .subscribe { any -> repopulateSubject.onNext(any) }
+                .also { mDisposables.add(it) }
+    }
+
+    fun itemSwiped(id: Int) {
+        listInteracotor.deleteWord(id)
+                .subscribe { repopulateSubject.onNext(repopulateSubject) }
+                .also { mDisposables.add(it) }
     }
 
     fun clickFavorite() {

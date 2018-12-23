@@ -14,7 +14,7 @@ import ru.andrey.cleandictionary.R
 import ru.andrey.cleandictionary.presentation.dto.TranslationDto
 import ru.andrey.cleandictionary.presentation.view.list.WordAdapter.ItemPayload.FAVORITE
 
-class WordAdapter(private val itemClicked: (TranslationDto) -> Unit,
+class WordAdapter(private val itemClicked: (Int) -> Unit,
                   context: Context) : ListAdapter<TranslationDto, Holder>(DiffCallback()) {
 
     private val stars = arrayOf(
@@ -30,13 +30,14 @@ class WordAdapter(private val itemClicked: (TranslationDto) -> Unit,
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val item = getItem(position)
 
+        holder.id = item.id
         holder.header.text = item.word.word
         holder.translation.text = item.translation
         holder.langFrom.text = item.word.from
         holder.langTo.text = item.word.to
         holder.star.setImageDrawable(getStarImage(item.favorite))
 
-        holder.star.setOnClickListener { itemClicked(item) }
+        holder.star.setOnClickListener { itemClicked(item.id) }
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int, payloads: List<Any>) {
@@ -50,6 +51,10 @@ class WordAdapter(private val itemClicked: (TranslationDto) -> Unit,
         }
     }
 
+    override fun getItemId(position: Int): Long {
+        return getItem(position).id.toLong()
+    }
+
     private fun getStarImage(enabled: Boolean): Drawable {
         return if (enabled) stars[1] else stars[0]
     }
@@ -61,6 +66,7 @@ class WordAdapter(private val itemClicked: (TranslationDto) -> Unit,
 
 class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+    var id: Int = 0
     var header: TextView = itemView.findViewById(R.id.word_header)
     var translation: TextView = itemView.findViewById(R.id.word_translation)
     var star: ImageView = itemView.findViewById(R.id.star_image)

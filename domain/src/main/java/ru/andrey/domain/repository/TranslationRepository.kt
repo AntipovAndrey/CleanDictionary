@@ -1,5 +1,6 @@
 package ru.andrey.domain.repository
 
+import io.reactivex.Completable
 import io.reactivex.Single
 import ru.andrey.domain.model.Translation
 
@@ -12,6 +13,8 @@ interface TranslationRepository {
     fun save(item: Translation): Single<Translation>
 
     fun update(item: Translation): Single<Translation>
+
+    fun delete(id: Int): Completable
 
     fun initLanguages(vararg langs: String)
 }

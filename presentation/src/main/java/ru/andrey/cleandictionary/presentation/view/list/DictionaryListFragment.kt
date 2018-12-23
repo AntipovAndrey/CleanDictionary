@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import android.widget.TextView
 import com.arellomobile.mvp.MvpAppCompatFragment
@@ -54,6 +55,10 @@ class DictionaryListFragment : MvpAppCompatFragment(), WordListView {
         recyclerView.layoutManager = layoutManager
         wordAdapter = WordAdapter({ listPresenter.clickStar(it) }, requireContext())
         recyclerView.adapter = wordAdapter
+        val itemTouch = RecyclerItemTouch(0, ItemTouchHelper.LEFT) {
+            listPresenter.itemSwiped(it.id)
+        }
+        ItemTouchHelper(itemTouch).attachToRecyclerView(recyclerView)
         return view
     }
 
@@ -80,6 +85,12 @@ class DictionaryListFragment : MvpAppCompatFragment(), WordListView {
 
     override fun show(items: List<TranslationDto>) {
         if (items.isEmpty()) {
+            if (favoriteEnabled) {
+                hint.setText(R.string.fav_word_hint)
+            } else {
+                hint.setText(R.string.add_word_hint)
+            }
+            showHint()
             return
         }
         showRecyclerView()

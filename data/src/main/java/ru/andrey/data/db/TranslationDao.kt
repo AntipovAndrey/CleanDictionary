@@ -17,4 +17,7 @@ interface TranslationDao {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(item: TranslationData)
+
+    @Query("DELETE FROM translations WHERE id=:id")
+    fun delete(id: Int)
 }

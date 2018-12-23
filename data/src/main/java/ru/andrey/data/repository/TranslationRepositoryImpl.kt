@@ -1,6 +1,7 @@
 package ru.andrey.data.repository
 
 import android.annotation.SuppressLint
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -28,12 +29,12 @@ class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepo
     private val idToIndex = HashMap<Int, Int>()
     private var totalInserted = 0
 
-    private val backgroundUpdater = PublishSubject.create<TranslationData>()
+    private val backgroundUpdater = PublishSubject.create<() -> Unit>()
 
     init {
         backgroundUpdater
                 .subscribeOn(Schedulers.io())
-                .subscribe { dao.update(it) }
+                .subscribe { it() }
     }
 
     override fun getAll(): Single<List<Translation>> {
@@ -65,8 +66,26 @@ class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepo
                 cache[index + totalInserted] = it
             }
             it
-        }.doOnSuccess { backgroundUpdater.onNext(it) }
+        }.doOnSuccess { backgroundUpdater.onNext { dao.update(it) } }
                 .map(::toModel)
+    }
+
+    override fun delete(id: Int): Completable {
+        return Completable.fromCallable {
+            var indexToRemove = Int.MIN_VALUE
+            var found = false
+            cache.forEachIndexed { index, data ->
+                if (!found) {
+                    if (data.id == id) {
+                        found = true
+                        indexToRemove = index
+                    }
+                } else {
+                    idToIndex[data.id] = idToIndex[data.id]!! - 1
+                }
+            }
+            cache.removeAt(indexToRemove)
+        }.doOnComplete { backgroundUpdater.onNext { dao.delete(id) } }
     }
 
     override fun initLanguages(vararg langs: String) {

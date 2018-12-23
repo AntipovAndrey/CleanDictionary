@@ -35,7 +35,7 @@ constructor(private val translationInteractor: TranslationInteractor,
             translateDisaposable = Single.just(term)
                     .doOnSuccess { viewState.showProgressBar(true) }
                     .flatMap { translateWord(it, Language.byCode(langFrom), Language.byCode(langTo)) }
-                    .subscribe(this::translationSucceed, this::translationError);
+                    .subscribe(this::translationSucceed, this::translationError)
         } else {
             viewState.updateTranslation("")
         }
