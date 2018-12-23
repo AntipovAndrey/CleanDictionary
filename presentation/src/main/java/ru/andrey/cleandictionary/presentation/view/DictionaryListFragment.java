@@ -25,7 +25,6 @@ import ru.andrey.cleandictionary.App;
 import ru.andrey.cleandictionary.R;
 import ru.andrey.cleandictionary.presentation.dto.TranslationDto;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryListPresenter;
-import ru.andrey.domain.model.Translation;
 
 public class DictionaryListFragment extends MvpAppCompatFragment implements WordListView {
     public static final int WORD_ADDED_CODE = 1337;
@@ -33,6 +32,7 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
     private ProgressBar mProgressBar;
 
     private MenuItem mFavoriteItem;
+    private boolean mFavoriteEnabled;
 
     private CompositeDisposable mDisposables;
 
@@ -69,7 +69,6 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
         mWordAdapter = new WordAdapter(mListPresenter::clickStar);
         mRecyclerView.setAdapter(mWordAdapter);
         showRecyclerView();
-        mListPresenter.start();
         return view;
     }
 
@@ -92,13 +91,18 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main_menu, menu);
         mFavoriteItem = menu.getItem(0);
+        setFavoriteMenuIcon(mFavoriteEnabled);
         mListPresenter.menuCreated();
     }
 
+
     @Override
     public void setFavoriteMenuIcon(boolean activate) {
-        mFavoriteItem.setIcon(activate ?
-                R.drawable.ic_favorite_24dp : R.drawable.ic_favorite_border_24dp);
+        mFavoriteEnabled = activate;
+        if (mFavoriteItem != null) {
+            mFavoriteItem.setIcon(activate ?
+                    R.drawable.ic_favorite_24dp : R.drawable.ic_favorite_border_24dp);
+        }
     }
 
     @Override
@@ -113,17 +117,6 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
         mRecyclerView.post(() -> {
             mRecyclerView.smoothScrollToPosition(0);
         });
-    }
-
-    @Override
-    public void remove(Translation item) {
-//        mWordAdapter.remove(item);
-    }
-
-
-    @Override
-    public void updateTranslation(Translation translation, int index) {
-//        mWordAdapter.replace(translation, index);
     }
 
     @Override

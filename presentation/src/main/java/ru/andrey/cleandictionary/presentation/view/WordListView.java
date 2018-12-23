@@ -9,7 +9,6 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import java.util.List;
 
 import ru.andrey.cleandictionary.presentation.dto.TranslationDto;
-import ru.andrey.domain.model.Translation;
 
 @StateStrategyType(OneExecutionStateStrategy.class)
 public interface WordListView extends MvpView {
@@ -19,8 +18,4 @@ public interface WordListView extends MvpView {
     void startActivity(Class<? extends Activity> classActivity);
 
     void show(List<TranslationDto> items);
-
-    void updateTranslation(Translation translation, int index);
-
-    void remove(Translation item);
 }

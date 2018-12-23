@@ -41,7 +41,7 @@ public class WordAdapter extends ListAdapter<TranslationDto, WordAdapter.Holder>
         holder.langTo.setText(item.getWord().getTo());
         holder.star.setImageResource(getStarImage(item.getFavorite()));
 
-        holder.star.setOnClickListener(v -> mItemClicked.onStarClicked(item, position));
+        holder.star.setOnClickListener(v -> mItemClicked.onStarClicked(item));
     }
 
     private int getStarImage(boolean enabled) {
@@ -82,6 +82,6 @@ public class WordAdapter extends ListAdapter<TranslationDto, WordAdapter.Holder>
             };
 
     interface ItemClicked {
-        void onStarClicked(TranslationDto translation, int position);
+        void onStarClicked(TranslationDto translation);
     }
 }
