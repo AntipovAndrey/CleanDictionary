@@ -6,7 +6,7 @@ ext {
     testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
 
     // Libs
-    androidSupportLibVersion = "27.1.0"
+    androidSupportLibVersion = "27.1.1"
 
     roomVersion = "1.1.1"
     room = "android.arch.persistence.room:runtime:$roomVersion"
