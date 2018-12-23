@@ -8,34 +8,52 @@ import ru.andrey.data.db.entity.TranslationData
 import ru.andrey.domain.model.Language
 import ru.andrey.domain.model.Translation
 import ru.andrey.domain.repository.TranslationRepository
+import java.util.*
 
 class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepository {
 
     private val dao = dataBase.translationDao()
     private val languageDao = dataBase.languageDao()
 
+    private val cache: MutableList<TranslationData> by lazy {
+        val cache = LinkedList(dao.getAll())
+        cache.forEachIndexed { index, data -> idToIndex[data.id] = index }
+        cache
+    }
+
+    private val idToIndex = HashMap<Int, Int>()
+    private var totalInserted = 0
+
     override fun getAll(): Single<List<Translation>> {
-        return Observable.defer { Observable.fromIterable(dao.getAll()) }
-                .map(::toModel)
-                .toList()
+        return Observable.defer { Observable.fromIterable(cache) }
+                .map(::toModel).toList()
     }
 
     override fun findById(id: Int): Single<Translation> {
-        return Single.fromCallable { dao.findById(id) }
-                .map(::toModel)
+        return Single.fromCallable {
+            idToIndex[id]?.let { cache[it + totalInserted] }
+        }.map(::toModel)
     }
 
     override fun save(item: Translation): Single<Translation> {
         return insert(item) {
             it.id = 0
-            dao.save(it).toInt()
+            it.id = dao.save(it).toInt()
+            cache.add(0, it)
+            totalInserted++
+            idToIndex[it.id] = 0 - totalInserted
+            it
         }
     }
 
     override fun update(item: Translation): Single<Translation> {
         return insert(item) {
             dao.update(it)
-            it.id
+            val index = idToIndex[it.id]
+            if (index != null) {
+                cache[index + totalInserted] = it
+            }
+            it
         }
     }
 
@@ -46,11 +64,10 @@ class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepo
     }
 
     private fun insert(item: Translation,
-                       saver: (item: TranslationData) -> Int): Single<Translation> {
+                       saver: (item: TranslationData) -> TranslationData): Single<Translation> {
         return Single.just(item)
                 .map(::toDto)
                 .map(saver)
-                .map { dao.findById(it) }
                 .map(::toModel)
     }
 
