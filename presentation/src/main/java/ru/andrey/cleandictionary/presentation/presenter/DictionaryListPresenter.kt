@@ -7,8 +7,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import ru.andrey.cleandictionary.presentation.dto.TranslationDto
-import ru.andrey.cleandictionary.presentation.view.AddWordActivity
-import ru.andrey.cleandictionary.presentation.view.WordListView
+import ru.andrey.cleandictionary.presentation.view.addword.AddWordActivity
+import ru.andrey.cleandictionary.presentation.view.list.WordListView
 import ru.andrey.domain.interactor.FavoriteInteractor
 import ru.andrey.domain.interactor.TranslationsListInteractor
 import javax.inject.Inject

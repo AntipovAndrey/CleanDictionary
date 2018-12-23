@@ -5,7 +5,7 @@ import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import ru.andrey.cleandictionary.presentation.view.AddWordView
+import ru.andrey.cleandictionary.presentation.view.addword.AddWordView
 import ru.andrey.domain.interactor.TranslationInteractor
 import ru.andrey.domain.interactor.TranslationsListInteractor
 import ru.andrey.domain.model.Language

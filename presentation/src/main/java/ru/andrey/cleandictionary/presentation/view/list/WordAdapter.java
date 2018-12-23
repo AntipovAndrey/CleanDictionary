@@ -1,4 +1,4 @@
-package ru.andrey.cleandictionary.presentation.view;
+package ru.andrey.cleandictionary.presentation.view.list;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -43,7 +43,7 @@ public class WordAdapter extends ListAdapter<TranslationDto, WordAdapter.Holder>
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         final TranslationDto item = getItem(position);
         holder.header.setText(item.getWord().getWord());
-        holder.traslation.setText(item.getTranslation());
+        holder.translation.setText(item.getTranslation());
         holder.langFrom.setText(item.getWord().getFrom());
         holder.langTo.setText(item.getWord().getTo());
         holder.star.setImageDrawable(getStarImage(item.getFavorite()));
@@ -71,7 +71,7 @@ public class WordAdapter extends ListAdapter<TranslationDto, WordAdapter.Holder>
     static class Holder extends RecyclerView.ViewHolder {
 
         TextView header;
-        TextView traslation;
+        TextView translation;
         ImageView star;
         TextView langFrom;
         TextView langTo;
@@ -80,7 +80,7 @@ public class WordAdapter extends ListAdapter<TranslationDto, WordAdapter.Holder>
         Holder(View itemView) {
             super(itemView);
             header = itemView.findViewById(R.id.word_header);
-            traslation = itemView.findViewById(R.id.word_translation);
+            translation = itemView.findViewById(R.id.word_translation);
             star = itemView.findViewById(R.id.star_image);
             langFrom = itemView.findViewById(R.id.lang_from);
             langTo = itemView.findViewById(R.id.lang_to);

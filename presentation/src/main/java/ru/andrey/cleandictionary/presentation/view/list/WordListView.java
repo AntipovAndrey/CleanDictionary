@@ -1,4 +1,4 @@
-package ru.andrey.cleandictionary.presentation.view;
+package ru.andrey.cleandictionary.presentation.view.list;
 
 import android.app.Activity;
 

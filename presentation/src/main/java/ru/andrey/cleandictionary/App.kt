@@ -1,6 +1,5 @@
 package ru.andrey.cleandictionary
 
-import android.app.Activity
 import android.app.Application
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
@@ -12,8 +11,6 @@ import ru.andrey.cleandictionary.di.translation.TranslationComponent
 import ru.andrey.cleandictionary.di.translation.TranslationDataModule
 
 class App : Application() {
-    val Activity.app: App
-        get() = application as App
 
     val appComponent: ApplicationComponent by lazy {
         DaggerApplicationComponent.builder()

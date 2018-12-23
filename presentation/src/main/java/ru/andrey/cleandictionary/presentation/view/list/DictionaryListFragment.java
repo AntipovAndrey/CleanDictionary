@@ -1,4 +1,4 @@
-package ru.andrey.cleandictionary.presentation.view;
+package ru.andrey.cleandictionary.presentation.view.list;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,6 +27,7 @@ import ru.andrey.cleandictionary.presentation.dto.TranslationDto;
 import ru.andrey.cleandictionary.presentation.presenter.DictionaryListPresenter;
 
 public class DictionaryListFragment extends MvpAppCompatFragment implements WordListView {
+
     public static final int WORD_ADDED_CODE = 1337;
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
