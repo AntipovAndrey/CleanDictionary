@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,7 @@ public class AddWordFragment extends MvpAppCompatFragment implements AddWordView
     private FloatingActionButton mAddButton;
     private Spinner mLangFromSpinner;
     private Spinner mLangToSpinner;
+    private ProgressBar mProgressBar;
 
     private CompositeDisposable mCompositeDisposable;
 
@@ -60,7 +62,7 @@ public class AddWordFragment extends MvpAppCompatFragment implements AddWordView
         mAddButton = view.findViewById(R.id.add_word);
         mLangFromSpinner = view.findViewById(R.id.lang_from_spinner);
         mLangToSpinner = view.findViewById(R.id.lang_to_spinner);
-
+        mProgressBar = view.findViewById(R.id.progressBar);
 
         String[] items = getResources().getStringArray(R.array.languages_spinner_items);
         mCompositeDisposable.addAll(
@@ -115,7 +117,7 @@ public class AddWordFragment extends MvpAppCompatFragment implements AddWordView
 
     @Override
     public void showProgressBar(boolean enabled) {
-        //todo
+        mProgressBar.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
@@ -130,6 +132,7 @@ public class AddWordFragment extends MvpAppCompatFragment implements AddWordView
 
     @Override
     public void disableButton(boolean disabled) {
+        mAddButton.setVisibility(disabled ? View.INVISIBLE : View.VISIBLE);
         mAddButton.setEnabled(!disabled);
     }
 

@@ -25,19 +25,20 @@ constructor(private val translationInteractor: TranslationInteractor,
 
     private var translateDisaposable: Disposable? = null
 
-    fun updateTranslation(string: String) {
+    fun updateTranslation(term: String) {
         viewState.disableButton(true)
-        if (string.isBlank()) {
-            return
-        }
-        viewState.showProgressBar(true)
-        inputText = string
 
+        inputText = term
         translateDisaposable?.dispose()
 
-        translateDisaposable =
-                translateWord(string, Language.byCode(langFrom), Language.byCode(langTo))
-                        .subscribe(this::translationSucceed, this::translationError);
+        if (!term.isEmpty()) {
+            translateDisaposable = Single.just(term)
+                    .doOnSuccess { viewState.showProgressBar(true) }
+                    .flatMap { translateWord(it, Language.byCode(langFrom), Language.byCode(langTo)) }
+                    .subscribe(this::translationSucceed, this::translationError);
+        } else {
+            viewState.updateTranslation("")
+        }
     }
 
     fun addWord() {
@@ -68,7 +69,7 @@ constructor(private val translationInteractor: TranslationInteractor,
 
     private fun translationError(error: Throwable) {
         viewState.errorToast("Error")
-        viewState.showProgressBar(true)
+        viewState.showProgressBar(false)
         viewState.disableButton(true)
     }
 
