@@ -1,19 +1,19 @@
 package ru.andrey.cleandictionary.presentation.view;
 
 import com.arellomobile.mvp.MvpView;
-import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
-@StateStrategyType(OneExecutionStateStrategy.class)
+@StateStrategyType(AddToEndSingleStrategy.class)
 public interface AddWordView extends MvpView {
 
-	void showProgressBar(boolean enabled);
+    void showProgressBar(boolean enabled);
 
-	void updateTranslation(String word);
+    void updateTranslation(String word);
 
-	void errorToast(String error);
+    void errorToast(String error);
 
-	void disableButton(boolean disabled);
+    void disableButton(boolean disabled);
 
-	void close();
+    void close();
 }
