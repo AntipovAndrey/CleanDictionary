@@ -1,5 +1,7 @@
 package ru.andrey.cleandictionary.presentation.view;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.recyclerview.extensions.ListAdapter;
 import android.support.v7.util.DiffUtil;
@@ -11,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import ru.andrey.cleandictionary.R;
 import ru.andrey.cleandictionary.presentation.dto.TranslationDto;
 
@@ -18,10 +22,13 @@ public class WordAdapter extends ListAdapter<TranslationDto, WordAdapter.Holder>
 
     private ItemClicked mItemClicked;
 
-    public WordAdapter(ItemClicked itemClicked) {
-        super(DIFF_CALLBACK);
+    private Drawable[] stars = new Drawable[2];
 
+    WordAdapter(ItemClicked itemClicked, Context context) {
+        super(DIFF_CALLBACK);
         mItemClicked = itemClicked;
+        stars[0] = context.getDrawable(R.drawable.ic_no_star_24dp);
+        stars[1] = context.getDrawable(R.drawable.ic_star_24dp);
     }
 
     @NonNull
@@ -39,13 +46,26 @@ public class WordAdapter extends ListAdapter<TranslationDto, WordAdapter.Holder>
         holder.traslation.setText(item.getTranslation());
         holder.langFrom.setText(item.getWord().getFrom());
         holder.langTo.setText(item.getWord().getTo());
-        holder.star.setImageResource(getStarImage(item.getFavorite()));
+        holder.star.setImageDrawable(getStarImage(item.getFavorite()));
 
         holder.star.setOnClickListener(v -> mItemClicked.onStarClicked(item));
     }
 
-    private int getStarImage(boolean enabled) {
-        return enabled ? R.drawable.ic_star_24dp : R.drawable.ic_no_star_24dp;
+    @Override
+    public void onBindViewHolder(@NonNull Holder holder, int position, @NonNull List<Object> payloads) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position);
+        }
+        for (Object payload : payloads) {
+            switch ((ItemPayload) payload) {
+                case FAVORITE:
+                    holder.star.setImageDrawable(getStarImage(getItem(position).getFavorite()));
+            }
+        }
+    }
+
+    private Drawable getStarImage(boolean enabled) {
+        return enabled ? stars[1] : stars[0];
     }
 
     static class Holder extends RecyclerView.ViewHolder {
@@ -57,7 +77,7 @@ public class WordAdapter extends ListAdapter<TranslationDto, WordAdapter.Holder>
         TextView langTo;
         CardView card;
 
-        public Holder(View itemView) {
+        Holder(View itemView) {
             super(itemView);
             header = itemView.findViewById(R.id.word_header);
             traslation = itemView.findViewById(R.id.word_translation);
@@ -79,7 +99,19 @@ public class WordAdapter extends ListAdapter<TranslationDto, WordAdapter.Holder>
                 public boolean areContentsTheSame(TranslationDto oldDto, TranslationDto newDto) {
                     return oldDto.equals(newDto);
                 }
+
+                @Override
+                public Object getChangePayload(TranslationDto oldItem, TranslationDto newItem) {
+                    if (oldItem.getFavorite() != newItem.getFavorite()) {
+                        return ItemPayload.FAVORITE;
+                    }
+                    return super.getChangePayload(oldItem, newItem);
+                }
             };
+
+    enum ItemPayload {
+        FAVORITE
+    }
 
     interface ItemClicked {
         void onStarClicked(TranslationDto translation);

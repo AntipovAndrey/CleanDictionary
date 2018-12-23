@@ -66,7 +66,7 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
         showProgressBar();
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
-        mWordAdapter = new WordAdapter(mListPresenter::clickStar);
+        mWordAdapter = new WordAdapter(mListPresenter::clickStar, requireContext());
         mRecyclerView.setAdapter(mWordAdapter);
         showRecyclerView();
         return view;
