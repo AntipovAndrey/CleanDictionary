@@ -1,7 +1,10 @@
 package ru.andrey.data.repository
 
+import android.annotation.SuppressLint
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import ru.andrey.data.db.TranslationDatabase
 import ru.andrey.data.db.entity.LanguageData
 import ru.andrey.data.db.entity.TranslationData
@@ -10,6 +13,7 @@ import ru.andrey.domain.model.Translation
 import ru.andrey.domain.repository.TranslationRepository
 import java.util.*
 
+@SuppressLint(value = ["CheckResult"])
 class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepository {
 
     private val dao = dataBase.translationDao()
@@ -23,6 +27,14 @@ class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepo
 
     private val idToIndex = HashMap<Int, Int>()
     private var totalInserted = 0
+
+    private val backgroundUpdater = PublishSubject.create<TranslationData>()
+
+    init {
+        backgroundUpdater
+                .subscribeOn(Schedulers.io())
+                .subscribe { dao.update(it) }
+    }
 
     override fun getAll(): Single<List<Translation>> {
         return Observable.defer { Observable.fromIterable(cache) }
@@ -43,18 +55,18 @@ class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepo
             totalInserted++
             idToIndex[it.id] = 0 - totalInserted
             it
-        }
+        }.map(::toModel)
     }
 
     override fun update(item: Translation): Single<Translation> {
         return insert(item) {
-            dao.update(it)
             val index = idToIndex[it.id]
             if (index != null) {
                 cache[index + totalInserted] = it
             }
             it
-        }
+        }.doOnSuccess { backgroundUpdater.onNext(it) }
+                .map(::toModel)
     }
 
     override fun initLanguages(vararg langs: String) {
@@ -64,11 +76,10 @@ class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepo
     }
 
     private fun insert(item: Translation,
-                       saver: (item: TranslationData) -> TranslationData): Single<Translation> {
+                       saver: (item: TranslationData) -> TranslationData): Single<TranslationData> {
         return Single.just(item)
                 .map(::toDto)
                 .map(saver)
-                .map(::toModel)
     }
 
     private fun toModel(data: TranslationData): Translation {
