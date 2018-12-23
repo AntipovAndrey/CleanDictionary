@@ -12,7 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -30,7 +30,7 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
 
     public static final int WORD_ADDED_CODE = 1337;
     private RecyclerView mRecyclerView;
-    private ProgressBar mProgressBar;
+    private TextView mHint;
 
     private MenuItem mFavoriteItem;
     private boolean mFavoriteEnabled;
@@ -62,14 +62,13 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.dictionary_list_fragment, container, false);
         mRecyclerView = view.findViewById(R.id.recycler_view);
-        mProgressBar = view.findViewById(R.id.progress_bar);
+        mHint = view.findViewById(R.id.hint);
         view.findViewById(R.id.add_button).setOnClickListener(v -> mListPresenter.addWord());
-        showProgressBar();
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        showHint();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
         mWordAdapter = new WordAdapter(mListPresenter::clickStar, requireContext());
         mRecyclerView.setAdapter(mWordAdapter);
-        showRecyclerView();
         return view;
     }
 
@@ -113,6 +112,10 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
 
     @Override
     public void show(List<TranslationDto> items) {
+        if (items.size() == 0) {
+            return;
+        }
+        showRecyclerView();
         mWordAdapter.submitList(items);
         mRecyclerView.scrollToPosition(0);
         mRecyclerView.post(() -> {
@@ -137,12 +140,12 @@ public class DictionaryListFragment extends MvpAppCompatFragment implements Word
     }
 
     private void showRecyclerView() {
-        mProgressBar.setVisibility(View.INVISIBLE);
+        mHint.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
-    private void showProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
+    private void showHint() {
+        mHint.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.INVISIBLE);
     }
 }
