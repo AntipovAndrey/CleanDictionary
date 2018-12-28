@@ -6,7 +6,7 @@ import ru.andrey.cleandictionary.di.ApplicationComponent
 import ru.andrey.cleandictionary.di.scope.Feature
 import ru.andrey.cleandictionary.di.scope.Screen
 import ru.andrey.cleandictionary.presentation.presenter.AddWordPresenter
-import ru.andrey.cleandictionary.presentation.presenter.DictionaryListPresenter
+import ru.andrey.cleandictionary.presentation.presenter.WordListPresenter
 import ru.andrey.domain.repository.TranslationRepository
 
 @Feature
@@ -22,7 +22,7 @@ interface TranslationComponent {
     @Subcomponent
     interface PresenterComponent {
 
-        fun dictionaryListPresenter(): DictionaryListPresenter
+        fun wordListPresenter(): WordListPresenter
 
         fun addWordPresenter(): AddWordPresenter
     }

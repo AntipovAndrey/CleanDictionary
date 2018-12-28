@@ -14,9 +14,9 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import ru.andrey.cleandictionary.App
 import ru.andrey.cleandictionary.R
 import ru.andrey.cleandictionary.presentation.dto.TranslationDto
-import ru.andrey.cleandictionary.presentation.presenter.DictionaryListPresenter
+import ru.andrey.cleandictionary.presentation.presenter.WordListPresenter
 
-class DictionaryListFragment : MvpAppCompatFragment(), WordListView {
+class WordListFragment : MvpAppCompatFragment(), WordListView {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var hint: TextView
@@ -27,14 +27,14 @@ class DictionaryListFragment : MvpAppCompatFragment(), WordListView {
     private lateinit var wordAdapter: WordAdapter
 
     @InjectPresenter
-    internal lateinit var listPresenter: DictionaryListPresenter
+    internal lateinit var listPresenter: WordListPresenter
 
     @ProvidePresenter
-    internal fun providePresenter(): DictionaryListPresenter {
+    internal fun providePresenter(): WordListPresenter {
         return (activity!!.application as App)
                 .translationComponent
                 .presenter()
-                .dictionaryListPresenter()
+                .wordListPresenter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -3,16 +3,11 @@ package ru.andrey.cleandictionary.presentation.view
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import com.arellomobile.mvp.MvpAppCompatFragment
-import ru.andrey.cleandictionary.App
 import ru.andrey.cleandictionary.R
 
 abstract class SingleFragmentActivity : AppCompatActivity() {
 
-    val MvpAppCompatFragment.app: App
-        get() = application as App
-
-    protected val layoutResId: Int
+    private val layoutResId: Int
         get() = R.layout.activity_fragment
 
     protected abstract fun createFragment(): Fragment

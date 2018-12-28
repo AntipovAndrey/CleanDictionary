@@ -14,38 +14,38 @@ import ru.andrey.domain.interactor.TranslationsListInteractor
 import javax.inject.Inject
 
 @InjectViewState
-class DictionaryListPresenter @Inject
+class WordListPresenter @Inject
 constructor(private val listInteracotor: TranslationsListInteractor,
             private val favoriteInteractor: FavoriteInteractor) : MvpPresenter<WordListView>() {
 
-    private var mFavoriteEnabled = false
+    private var favoriteEnabled = false
 
-    private val mDisposables = CompositeDisposable()
+    private val disposables = CompositeDisposable()
 
     private val repopulateSubject = PublishSubject.create<Any>()
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         populateList()
-        viewState.setFavoriteMenuIcon(mFavoriteEnabled)
+        viewState.setFavoriteMenuIcon(favoriteEnabled)
     }
 
     fun clickStar(id: Int) {
         favoriteInteractor.toggleFavorite(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { any -> repopulateSubject.onNext(any) }
-                .also { mDisposables.add(it) }
+                .also { disposables.add(it) }
     }
 
     fun itemSwiped(id: Int) {
         listInteracotor.deleteWord(id)
                 .subscribe { repopulateSubject.onNext(repopulateSubject) }
-                .also { mDisposables.add(it) }
+                .also { disposables.add(it) }
     }
 
     fun clickFavorite() {
-        mFavoriteEnabled = !mFavoriteEnabled
-        viewState.setFavoriteMenuIcon(mFavoriteEnabled)
+        favoriteEnabled = !favoriteEnabled
+        viewState.setFavoriteMenuIcon(favoriteEnabled)
         repopulateSubject.onNext(repopulateSubject)
     }
 
@@ -58,19 +58,19 @@ constructor(private val listInteracotor: TranslationsListInteractor,
     }
 
     fun menuCreated() {
-        viewState.setFavoriteMenuIcon(mFavoriteEnabled)
+        viewState.setFavoriteMenuIcon(favoriteEnabled)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mDisposables.dispose()
+        disposables.dispose()
     }
 
     private fun populateList() {
-        mDisposables.add(listInteracotor.getTranslations()
+        disposables.add(listInteracotor.getTranslations()
                 .flatMapObservable { list -> Observable.fromIterable(list) }
                 .filter {
-                    if (mFavoriteEnabled) {
+                    if (favoriteEnabled) {
                         it.favorite
                     } else {
                         true

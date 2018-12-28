@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".presentation.view.list.DictionaryListActivity">
+        <activity android:name=".presentation.view.list.WordListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
