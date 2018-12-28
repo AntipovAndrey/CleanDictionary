@@ -12,7 +12,9 @@ ext {
     room = "android.arch.persistence.room:runtime:$roomVersion"
     roomCompiler = "android.arch.persistence.room:compiler:$roomVersion"
 
-    rxJava = "io.reactivex.rxjava2:rxjava:2.1.6"
+    rxVersion = "2.1.6"
+    rxJava = "io.reactivex.rxjava2:rxjava:$rxVersion"
+    rxKotlin = "io.reactivex.rxjava2:rxkotlin:2.3.0"
 
     daggerVersion = "2.13"
     dagger = "com.google.dagger:dagger:$daggerVersion"
