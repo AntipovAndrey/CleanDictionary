@@ -1,6 +1,7 @@
 package ru.andrey.domain.interactor
 
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import ru.andrey.domain.model.Translation
@@ -33,7 +34,7 @@ class TranslationListInteractor(private val ioScheduler: Scheduler,
      *
      * @return Observable of fetched translation
      */
-    fun getTranslations(): Single<List<Translation>> {
+    fun getTranslations(): Observable<List<Translation>> {
         return translationRepository.getAll()
                 .subscribeOn(ioScheduler)
     }

@@ -1,12 +1,13 @@
 package ru.andrey.domain.repository
 
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 import ru.andrey.domain.model.Translation
 
 interface TranslationRepository {
 
-    fun getAll(): Single<List<Translation>>
+    fun getAll(): Observable<List<Translation>>
 
     fun findById(id: Int): Single<Translation>
 

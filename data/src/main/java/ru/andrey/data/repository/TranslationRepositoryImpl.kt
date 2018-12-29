@@ -31,15 +31,20 @@ class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepo
 
     private val backgroundUpdater = PublishSubject.create<() -> Unit>()
 
+    private val listChangedSubject = PublishSubject.create<Any>()
+
     init {
         backgroundUpdater
                 .subscribeOn(Schedulers.io())
                 .subscribe { it() }
     }
 
-    override fun getAll(): Single<List<Translation>> {
+    override fun getAll(): Observable<List<Translation>> {
         return Observable.defer { Observable.fromIterable(cache) }
-                .map(::toModel).toList()
+                .map(::toModel)
+                .toList()
+                .toObservable()
+                .repeatWhen { handler -> handler.flatMap { listChangedSubject } }
     }
 
     override fun findById(id: Int): Single<Translation> {
@@ -56,7 +61,8 @@ class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepo
             totalInserted++
             idToIndex[it.id] = 0 - totalInserted
             it
-        }.map(::toModel)
+        }.doOnSuccess { listChangedSubject.onNext(listChangedSubject) }
+                .map(::toModel)
     }
 
     override fun update(item: Translation): Single<Translation> {
@@ -66,7 +72,10 @@ class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepo
                 cache[index + totalInserted] = it
             }
             it
-        }.doOnSuccess { backgroundUpdater.onNext { dao.update(it) } }
+        }.doOnSuccess {
+            backgroundUpdater.onNext { dao.update(it) }
+            listChangedSubject.onNext(listChangedSubject)
+        }
                 .map(::toModel)
     }
 
@@ -85,7 +94,10 @@ class TranslationRepositoryImpl(dataBase: TranslationDatabase) : TranslationRepo
                 }
             }
             cache.removeAt(indexToRemove)
-        }.doOnComplete { backgroundUpdater.onNext { dao.delete(id) } }
+        }.doOnComplete {
+            backgroundUpdater.onNext { dao.delete(id) }
+            listChangedSubject.onNext(listChangedSubject)
+        }
     }
 
     override fun initLanguages(vararg langs: String) {

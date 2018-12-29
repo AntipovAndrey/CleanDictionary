@@ -5,7 +5,7 @@ import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.disposables.Disposable
 import ru.andrey.cleandictionary.presentation.dto.TranslationDto
 import ru.andrey.cleandictionary.presentation.view.list.WordListView
 import ru.andrey.domain.interactor.FavoriteInteractor
@@ -20,8 +20,7 @@ constructor(private val listInteracotor: TranslationListInteractor,
     private var favoriteEnabled = false
 
     private val disposables = CompositeDisposable()
-
-    private val repopulateSubject = PublishSubject.create<Any>()
+    private var listDisposable: Disposable? = null
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -32,28 +31,24 @@ constructor(private val listInteracotor: TranslationListInteractor,
     fun clickStar(id: Int) {
         favoriteInteractor.toggleFavorite(id)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { any -> repopulateSubject.onNext(any) }
+                .subscribe()
                 .also { disposables.add(it) }
     }
 
     fun itemSwiped(id: Int) {
         listInteracotor.deleteWord(id)
-                .subscribe { repopulateSubject.onNext(repopulateSubject) }
+                .subscribe()
                 .also { disposables.add(it) }
     }
 
     fun clickFavorite() {
         favoriteEnabled = !favoriteEnabled
         viewState.setFavoriteMenuIcon(favoriteEnabled)
-        repopulateSubject.onNext(repopulateSubject)
+        populateList()
     }
 
     fun addWord() {
         viewState.openAddWord()
-    }
-
-    fun wordAdded() {
-        repopulateSubject.onNext(repopulateSubject)
     }
 
     fun menuCreated() {
@@ -63,23 +58,27 @@ constructor(private val listInteracotor: TranslationListInteractor,
     override fun onDestroy() {
         super.onDestroy()
         disposables.dispose()
+        listDisposable?.dispose()
     }
 
     private fun populateList() {
-        disposables.add(listInteracotor.getTranslations()
-                .flatMapObservable { list -> Observable.fromIterable(list) }
-                .filter {
-                    if (favoriteEnabled) {
-                        it.favorite
-                    } else {
-                        true
-                    }
+        listDisposable?.dispose()
+        listInteracotor.getTranslations()
+                .switchMap { list ->
+                    Observable.fromIterable(list)
+                            .filter {
+                                if (favoriteEnabled) {
+                                    it.favorite
+                                } else {
+                                    true
+                                }
+                            }
+                            .map { TranslationDto.fromModel(it) }
+                            .toList()
+                            .toObservable()
                 }
-                .map { TranslationDto.fromModel(it) }
-                .toList()
-                .toObservable()
-                .repeatWhen { handler -> handler.flatMap { repopulateSubject } }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { all -> viewState.show(all) })
+                .subscribe { all -> viewState.show(all) }
+                .also { listDisposable = it }
     }
 }

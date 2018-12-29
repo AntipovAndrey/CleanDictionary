@@ -71,7 +71,7 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
     }
 
     override fun openAddWord() {
-        startActivityForResult(Intent(activity, AddWordActivity::class.java), WORD_ADDED_CODE)
+        startActivity(Intent(activity, AddWordActivity::class.java))
     }
 
     override fun show(items: List<TranslationDto>) {
@@ -88,13 +88,6 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
         wordAdapter.submitList(items)
         recyclerView.scrollToPosition(0)
         recyclerView.post { recyclerView.smoothScrollToPosition(0) }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == WORD_ADDED_CODE) {
-            listPresenter.wordAdded()
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -133,10 +126,5 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
     private fun showHint() {
         hint.visibility = View.VISIBLE
         recyclerView.visibility = View.INVISIBLE
-    }
-
-    companion object {
-
-        const val WORD_ADDED_CODE = 1337
     }
 }
