@@ -46,18 +46,10 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.dictionary_list_fragment, container, false)
-        recyclerView = view.findViewById(R.id.recycler_view)
-        hint = view.findViewById(R.id.hint)
-        view.findViewById<View>(R.id.add_button).setOnClickListener { listPresenter.addWord() }
+        findViews(view)
+        setupButtonListener(view)
         showHint()
-        val layoutManager = LinearLayoutManager(context)
-        recyclerView.layoutManager = layoutManager
-        wordAdapter = WordAdapter({ listPresenter.clickStar(it) }, requireContext())
-        recyclerView.adapter = wordAdapter
-        val itemTouch = RecyclerItemTouch(0, ItemTouchHelper.LEFT) {
-            listPresenter.itemSwiped(it.id)
-        }
-        ItemTouchHelper(itemTouch).attachToRecyclerView(recyclerView)
+        setupRecycler()
         return view
     }
 
@@ -110,6 +102,27 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
             listPresenter.clickFavorite()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setupButtonListener(view: View) {
+        view.findViewById<View>(R.id.add_button)
+                .setOnClickListener { listPresenter.addWord() }
+    }
+
+    private fun setupRecycler() {
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = layoutManager
+        wordAdapter = WordAdapter({ listPresenter.clickStar(it) }, requireContext())
+        recyclerView.adapter = wordAdapter
+        val itemTouch = RecyclerItemTouch(0, ItemTouchHelper.LEFT) {
+            listPresenter.itemSwiped(it.id)
+        }
+        ItemTouchHelper(itemTouch).attachToRecyclerView(recyclerView)
+    }
+
+    private fun findViews(view: View) {
+        recyclerView = view.findViewById(R.id.recycler_view)
+        hint = view.findViewById(R.id.hint)
     }
 
     private fun showRecyclerView() {
