@@ -27,6 +27,8 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
     private lateinit var addButton: FloatingActionButton
     private lateinit var retryButton: FloatingActionButton
     private lateinit var progressBar: ProgressBar
+    private lateinit var langFromSpinner: Spinner
+    private lateinit var langToSpinner: Spinner
 
     private lateinit var compositeDisposable: CompositeDisposable
 
@@ -45,50 +47,29 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.add_word_fragment, container, false)
-        wordEditText = view.findViewById(R.id.word_edit_text)
-        translation = view.findViewById(R.id.translation_text_view)
-        addButton = view.findViewById(R.id.add_word)
-        progressBar = view.findViewById(R.id.progressBar)
-        retryButton = view.findViewById(R.id.retry)
-        setButtonState(ButtonState.NO)
-        val langFromSpinner = view.findViewById<Spinner>(R.id.lang_from_spinner)
-        val langToSpinner = view.findViewById<Spinner>(R.id.lang_to_spinner)
+        findViews(view)
         val items = resources.getStringArray(R.array.languages_spinner_items)
-
-        compositeDisposable.addAll(
-                RxAdapterView.itemSelections(langFromSpinner)
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .subscribe { i -> presenter.setLangFrom(items[i]) },
-
-                RxAdapterView.itemSelections(langToSpinner)
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .subscribe { i -> presenter.setLangTo(items[i]) },
-
-                RxTextView.textChanges(wordEditText)
-                        .debounce(100, TimeUnit.MILLISECONDS)
-                        .map { it.toString() }
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { presenter.updateTranslation(it) }
-        )
-
-        langFromSpinner.setSelection(0)
-        langToSpinner.setSelection(1)
-
-        presenter.setLangFrom(items[0])
-        presenter.setLangTo(items[1])
-
-        addButton.setOnClickListener { _ -> presenter.addWord() }
-        retryButton.setOnClickListener { _ -> presenter.retry() }
+        if (savedInstanceState == null) {
+            langFromSpinner.setSelection(0)
+            presenter.setLangFrom(items[0])
+            langToSpinner.setSelection(1)
+            presenter.setLangTo(items[1])
+        }
+        setButtonState(ButtonState.NO)
         return view
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    override fun onStart() {
+        super.onStart()
         compositeDisposable = CompositeDisposable()
+        setupButtonListeners()
+        setupSpinnerListeners()
+        setupTextListeners()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
         compositeDisposable.dispose()
     }
 
@@ -133,6 +114,21 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
         activity!!.finish()
     }
 
+    private fun setupButtonListeners() {
+        addButton.setOnClickListener { presenter.addWord() }
+        retryButton.setOnClickListener { presenter.retry() }
+    }
+
+    private fun findViews(view: View) {
+        wordEditText = view.findViewById(R.id.word_edit_text)
+        translation = view.findViewById(R.id.translation_text_view)
+        addButton = view.findViewById(R.id.add_word)
+        progressBar = view.findViewById(R.id.progressBar)
+        retryButton = view.findViewById(R.id.retry)
+        langFromSpinner = view.findViewById(R.id.lang_from_spinner)
+        langToSpinner = view.findViewById(R.id.lang_to_spinner)
+    }
+
     private fun showProgressBar(enabled: Boolean) {
         progressBar.visibility = if (enabled) View.VISIBLE else View.INVISIBLE
     }
@@ -145,5 +141,32 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
     private fun enableRetry(enabled: Boolean) {
         retryButton.visibility = if (enabled) View.VISIBLE else View.INVISIBLE
         retryButton.isEnabled = enabled
+    }
+
+    private fun setupSpinnerListeners() {
+        val items = resources.getStringArray(R.array.languages_spinner_items)
+        RxAdapterView.itemSelections(langFromSpinner)
+                .skip(1)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .map { items[it] }
+                .subscribe { presenter.setLangFrom(it) }
+                .also { compositeDisposable.add(it) }
+
+        RxAdapterView.itemSelections(langToSpinner)
+                .skip(1)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .map { items[it] }
+                .subscribe { presenter.setLangTo(it) }
+                .also { compositeDisposable.add(it) }
+    }
+
+    private fun setupTextListeners() {
+        RxTextView.textChanges(wordEditText)
+                .skip(1)
+                .debounce(100, TimeUnit.MILLISECONDS)
+                .map { it.toString() }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { presenter.setWord(it) }
+                .also { compositeDisposable.add(it) }
     }
 }

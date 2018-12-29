@@ -34,12 +34,12 @@ constructor(private val translationInteractor: TranslationInteractor,
 
     private val retrySubject = PublishSubject.create<Any>()
 
-
-    private var translateDisposable: Disposable? = null
+    private lateinit var translateDisposable: Disposable
 
     override fun onFirstViewAttach() {
+        viewState.setButtonState(ButtonState.NO)
         Observables.combineLatest(wordSubject, langFromSubject, langToSubject, ::WordDto)
-                .doOnNext { _ -> viewState.setButtonState(ButtonState.LOADING) }
+                .doOnNext { viewState.setButtonState(ButtonState.LOADING) }
                 .switchMap {
                     translateWord(it)
                             .toObservable()
@@ -56,19 +56,22 @@ constructor(private val translationInteractor: TranslationInteractor,
     }
 
     override fun onDestroy() {
-        translateDisposable?.dispose()
+        translateDisposable.dispose()
     }
 
-    fun updateTranslation(term: String) {
-        viewState.setButtonState(ButtonState.NO)
-
+    fun setWord(term: String) {
         inputText = term
+        wordSubject.onNext(term)
+    }
 
-        if (!term.isEmpty()) {
-            wordSubject.onNext(term)
-        } else {
-            viewState.updateTranslation("")
-        }
+    fun setLangFrom(langCode: String) {
+        langFrom = langCode
+        langFromSubject.onNext(langCode)
+    }
+
+    fun setLangTo(langCode: String) {
+        langTo = langCode
+        langToSubject.onNext(langCode)
     }
 
     fun addWord() {
@@ -84,16 +87,6 @@ constructor(private val translationInteractor: TranslationInteractor,
 
     fun retry() {
         retrySubject.onNext(retrySubject)
-    }
-
-    fun setLangFrom(langCode: String) {
-        langFrom = langCode
-        langFromSubject.onNext(langCode)
-    }
-
-    fun setLangTo(langCode: String) {
-        langTo = langCode
-        langToSubject.onNext(langCode)
     }
 
     private fun translationSucceed(translated: String) {
