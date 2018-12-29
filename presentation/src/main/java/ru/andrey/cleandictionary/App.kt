@@ -9,6 +9,7 @@ import ru.andrey.cleandictionary.di.DaggerApplicationComponent
 import ru.andrey.cleandictionary.di.translation.DaggerTranslationComponent
 import ru.andrey.cleandictionary.di.translation.TranslationComponent
 import ru.andrey.cleandictionary.di.translation.TranslationDataModule
+import ru.andrey.domain.model.Language
 
 class App : Application() {
 
@@ -29,7 +30,9 @@ class App : Application() {
         super.onCreate()
         val repo = translationComponent.translationRepository()
 
-        Completable.fromAction { repo.initLanguages("ru", "en", "fi") }
+        Completable.fromAction {
+            repo.initLanguages(*Language.values().map(Language::languageCode).toTypedArray())
+        }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
     }
