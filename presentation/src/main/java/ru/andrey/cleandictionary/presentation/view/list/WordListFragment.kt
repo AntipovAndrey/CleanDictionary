@@ -1,6 +1,5 @@
 package ru.andrey.cleandictionary.presentation.view.list
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -15,6 +14,7 @@ import ru.andrey.cleandictionary.App
 import ru.andrey.cleandictionary.R
 import ru.andrey.cleandictionary.presentation.dto.TranslationDto
 import ru.andrey.cleandictionary.presentation.presenter.list.WordListPresenter
+import ru.andrey.cleandictionary.presentation.view.addword.AddWordActivity
 
 class WordListFragment : MvpAppCompatFragment(), WordListView {
 
@@ -39,7 +39,6 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance = true
         setHasOptionsMenu(true)
     }
 
@@ -79,8 +78,8 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
         }
     }
 
-    override fun startActivity(classActivity: Class<out Activity>) {
-        startActivityForResult(Intent(activity, classActivity), WORD_ADDED_CODE)
+    override fun openAddWord() {
+        startActivityForResult(Intent(activity, AddWordActivity::class.java), WORD_ADDED_CODE)
     }
 
     override fun show(items: List<TranslationDto>) {
