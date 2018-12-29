@@ -6,8 +6,8 @@ import io.reactivex.Single
 import ru.andrey.domain.model.Translation
 import ru.andrey.domain.repository.TranslationRepository
 
-class TranslationsListInteractor(private val ioScheduler: Scheduler,
-                                 private val translationRepository: TranslationRepository) {
+class TranslationListInteractor(private val ioScheduler: Scheduler,
+                                private val translationRepository: TranslationRepository) {
 
     /**
      * Returns Single with saved word

@@ -1,4 +1,4 @@
-package ru.andrey.cleandictionary.presentation.presenter
+package ru.andrey.cleandictionary.presentation.presenter.list
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
@@ -10,12 +10,12 @@ import ru.andrey.cleandictionary.presentation.dto.TranslationDto
 import ru.andrey.cleandictionary.presentation.view.addword.AddWordActivity
 import ru.andrey.cleandictionary.presentation.view.list.WordListView
 import ru.andrey.domain.interactor.FavoriteInteractor
-import ru.andrey.domain.interactor.TranslationsListInteractor
+import ru.andrey.domain.interactor.TranslationListInteractor
 import javax.inject.Inject
 
 @InjectViewState
 class WordListPresenter @Inject
-constructor(private val listInteracotor: TranslationsListInteractor,
+constructor(private val listInteracotor: TranslationListInteractor,
             private val favoriteInteractor: FavoriteInteractor) : MvpPresenter<WordListView>() {
 
     private var favoriteEnabled = false

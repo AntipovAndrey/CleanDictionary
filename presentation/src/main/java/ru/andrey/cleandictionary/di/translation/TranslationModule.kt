@@ -10,7 +10,7 @@ import ru.andrey.data.repository.TranslationRepositoryImpl
 import ru.andrey.data.repository.YandexTranslationService
 import ru.andrey.domain.interactor.FavoriteInteractor
 import ru.andrey.domain.interactor.TranslationInteractor
-import ru.andrey.domain.interactor.TranslationsListInteractor
+import ru.andrey.domain.interactor.TranslationListInteractor
 import ru.andrey.domain.repository.TranslationRepository
 import ru.andrey.domain.repository.TranslationService
 
@@ -37,8 +37,8 @@ class TranslationModule {
 
     @Feature
     @Provides
-    fun provideTranslationsListInteractor(repo: TranslationRepository): TranslationsListInteractor {
-        return TranslationsListInteractor(Schedulers.io(), repo)
+    fun provideTranslationsListInteractor(repo: TranslationRepository): TranslationListInteractor {
+        return TranslationListInteractor(Schedulers.io(), repo)
     }
 
     @Feature

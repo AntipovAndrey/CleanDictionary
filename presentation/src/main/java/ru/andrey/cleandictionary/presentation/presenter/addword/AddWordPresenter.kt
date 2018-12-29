@@ -1,4 +1,4 @@
-package ru.andrey.cleandictionary.presentation.presenter
+package ru.andrey.cleandictionary.presentation.presenter.addword
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
@@ -11,7 +11,7 @@ import io.reactivex.subjects.PublishSubject
 import ru.andrey.cleandictionary.presentation.dto.WordDto
 import ru.andrey.cleandictionary.presentation.view.addword.AddWordView
 import ru.andrey.domain.interactor.TranslationInteractor
-import ru.andrey.domain.interactor.TranslationsListInteractor
+import ru.andrey.domain.interactor.TranslationListInteractor
 import ru.andrey.domain.model.Language
 import ru.andrey.domain.model.Translation
 import javax.inject.Inject
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @InjectViewState
 class AddWordPresenter @Inject
 constructor(private val translationInteractor: TranslationInteractor,
-            private val translationsListInteractor: TranslationsListInteractor) : MvpPresenter<AddWordView>() {
+            private val translationsListInteractor: TranslationListInteractor) : MvpPresenter<AddWordView>() {
 
     private var inputText: String? = null
     private var translation: String? = null

@@ -16,8 +16,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import ru.andrey.cleandictionary.App
 import ru.andrey.cleandictionary.R
-import ru.andrey.cleandictionary.presentation.presenter.AddWordPresenter
-import ru.andrey.cleandictionary.presentation.presenter.ButtonState
+import ru.andrey.cleandictionary.presentation.presenter.addword.AddWordPresenter
+import ru.andrey.cleandictionary.presentation.presenter.addword.ButtonState
 import java.util.concurrent.TimeUnit
 
 class AddWordFragment : MvpAppCompatFragment(), AddWordView {

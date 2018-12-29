@@ -14,7 +14,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import ru.andrey.cleandictionary.App
 import ru.andrey.cleandictionary.R
 import ru.andrey.cleandictionary.presentation.dto.TranslationDto
-import ru.andrey.cleandictionary.presentation.presenter.WordListPresenter
+import ru.andrey.cleandictionary.presentation.presenter.list.WordListPresenter
 
 class WordListFragment : MvpAppCompatFragment(), WordListView {
 
