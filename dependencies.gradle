@@ -37,4 +37,10 @@ ext {
     junit = "junit:junit:4.12"
     mockito = "org.mockito:mockito-core:2.8.47"
     androidTestRunner = "com.android.support.test:runner:1.0.1"
+
+    espressoVersion = "3.1.0"
+    espressoCore = "androidx.test.espresso:espresso-core:$espressoVersion"
+    espressoIntents = "androidx.test.espresso:espresso-intents:$espressoVersion"
+    testRules = "androidx.test:rules:1.1.0"
+    testRunner = "androidx.test.ext:junit:1.1.0"
 }

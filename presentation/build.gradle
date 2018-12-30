@@ -12,7 +12,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "YANDEX_API_KEY", "\"${yandex_translator_api_key}\""
     }
@@ -69,6 +69,11 @@ dependencies {
 
     // Room
     implementation rootProject.ext.room
+
+    androidTestImplementation rootProject.ext.espressoCore
+    androidTestImplementation rootProject.ext.espressoIntents
+    androidTestImplementation rootProject.ext.testRules
+    androidTestImplementation rootProject.ext.testRunner
 
     implementation project(':data')
     implementation project(':domain')
