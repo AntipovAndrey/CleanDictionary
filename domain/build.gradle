@@ -6,8 +6,10 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation rootProject.ext.rxJava
-//    testImplementation rootProject.ext.junit
-//    testImplementation rootProject.ext.mockito
+
+    testImplementation rootProject.ext.junit5api
+    testImplementation rootProject.ext.junit5engine
+    testImplementation rootProject.ext.mockito
 }
 repositories {
     mavenCentral()

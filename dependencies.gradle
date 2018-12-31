@@ -38,6 +38,10 @@ ext {
     mockito = "org.mockito:mockito-core:2.8.47"
     androidTestRunner = "com.android.support.test:runner:1.0.1"
 
+    junit5Version = "5.3.1"
+    junit5api = "org.junit.jupiter:junit-jupiter-api:$junit5Version"
+    junit5engine = "org.junit.jupiter:junit-jupiter-engine:$junit5Version"
+
     espressoVersion = "3.1.0"
     espressoCore = "androidx.test.espresso:espresso-core:$espressoVersion"
     espressoIntents = "androidx.test.espresso:espresso-intents:$espressoVersion"
