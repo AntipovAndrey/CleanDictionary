@@ -5,7 +5,7 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -69,7 +69,7 @@ class WordListActivityFilledTest {
     @Test
     fun when_all_favorite_gone_show_hint() {
         onView(withId(R.id.favorite))
-                .perform(ViewActions.click())
+                .perform(click())
 
         clickStarOnFirstItem()
 
@@ -86,7 +86,7 @@ class WordListActivityFilledTest {
         clickStarOnFirstItem()
 
         onView(withId(R.id.favorite))
-                .perform(ViewActions.click())
+                .perform(click())
 
         onView(withId(R.id.recycler_view))
                 .check(count(3))
