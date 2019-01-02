@@ -1,7 +1,6 @@
 package ru.andrey.cleandictionary.presentation.view.list
 
 import android.arch.persistence.room.Room
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -19,7 +18,6 @@ import org.junit.runner.RunWith
 import ru.andrey.cleandictionary.R
 import ru.andrey.cleandictionary.common.*
 import ru.andrey.data.db.TranslationDatabase
-import ru.andrey.data.db.entity.LanguageData
 import ru.andrey.data.db.entity.TranslationData
 
 @RunWith(AndroidJUnit4::class)
@@ -35,18 +33,14 @@ class WordListActivityFilledTest {
                 "translations_db")
                 .build()
                 .apply {
-                    languageDao().apply {
-                        save(LanguageData(0, "en"))
-                        save(LanguageData(0, "ru"))
-                    }
                     val lang1 = languageDao().findByCode("en")!!.id
                     val lang2 = languageDao().findByCode("ru")!!.id
                     translationDao().apply {
-                        save(TranslationData(0, "text1", "text2", lang1, lang2, false))
-                        save(TranslationData(0, "text1", "text2", lang1, lang2, false))
-                        save(TranslationData(0, "favorite", "text2", lang1, lang2, true))
-                        save(TranslationData(0, "text1", "text2", lang1, lang2, true))
-                        save(TranslationData(0, "favorite2", "text2", lang1, lang2, false))
+                        save(TranslationData(0, "text1", "text2", lang1, lang2, false, false))
+                        save(TranslationData(0, "text1", "text2", lang1, lang2, false, false))
+                        save(TranslationData(0, "favorite", "text2", lang1, lang2, false, true))
+                        save(TranslationData(0, "text1", "text2", lang1, lang2, false, true))
+                        save(TranslationData(0, "favorite2", "text2", lang1, lang2, false, false))
                     }
                 }
 
@@ -56,8 +50,16 @@ class WordListActivityFilledTest {
 
     @After
     fun tearDown() {
-        ApplicationProvider.getApplicationContext<Context>().deleteDatabase("translations_db")
-        Thread.sleep(100)
+        Room.databaseBuilder(ApplicationProvider.getApplicationContext(),
+                TranslationDatabase::class.java,
+                "translations_db")
+                .build()
+                .apply {
+                    val all = translationDao()
+                            .getAll()
+                            .blockingFirst()
+                    all.forEach { translationDao().delete(it.id) }
+                }
     }
 
     @Test
