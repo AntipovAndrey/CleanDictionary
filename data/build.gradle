@@ -35,10 +35,14 @@ dependencies {
 
     kapt rootProject.ext.daggerCompiler
     implementation rootProject.ext.dagger
+
     implementation rootProject.ext.rxJava
+
     implementation rootProject.ext.retrofit
     implementation rootProject.ext.retrofitGsonConverter
     implementation rootProject.ext.retrofitRxJava2Adapter
+
+    api rootProject.ext.roomRx
     implementation rootProject.ext.room
     kapt rootProject.ext.roomCompiler
 

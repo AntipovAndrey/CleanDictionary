@@ -1,6 +1,6 @@
 package ru.andrey.domain.interactor
 
-import io.reactivex.Single
+import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -30,7 +30,7 @@ class TranslationListInteractorTest {
 
     @Test
     fun `when saving with null id then create entity`() {
-        `when`(translationRepository.save(translationNoId)).thenReturn(Single.just(translationWithId))
+        `when`(translationRepository.save(translationNoId)).thenReturn(Completable.complete())
 
         interactor.saveWord(translationNoId)
                 .subscribe()
@@ -40,7 +40,7 @@ class TranslationListInteractorTest {
 
     @Test
     fun `when saving with non null id then update existing entity`() {
-        `when`(translationRepository.update(translationWithId)).thenReturn(Single.just(translationWithId))
+        `when`(translationRepository.update(translationWithId)).thenReturn(Completable.complete())
 
         interactor.saveWord(translationWithId)
                 .subscribe()

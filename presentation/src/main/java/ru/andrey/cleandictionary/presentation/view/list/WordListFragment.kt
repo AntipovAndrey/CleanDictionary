@@ -2,6 +2,7 @@ package ru.andrey.cleandictionary.presentation.view.list
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
@@ -16,9 +17,11 @@ import ru.andrey.cleandictionary.presentation.dto.TranslationDto
 import ru.andrey.cleandictionary.presentation.presenter.list.WordListPresenter
 import ru.andrey.cleandictionary.presentation.view.addword.AddWordActivity
 
+
 class WordListFragment : MvpAppCompatFragment(), WordListView {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var rootView: View
     private lateinit var hint: TextView
 
     private var favoriteItem: MenuItem? = null
@@ -90,6 +93,14 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
         recyclerView.post { recyclerView.smoothScrollToPosition(0) }
     }
 
+    override fun showSnackBar() {
+        Snackbar.make(rootView, R.string.word_was_removed, Snackbar.LENGTH_SHORT)
+                .apply {
+                    setAction(R.string.undo_string) { listPresenter.clickUndoRemoving() }
+                    show()
+                }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.favorite) {
             listPresenter.clickFavorite()
@@ -114,6 +125,7 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
     }
 
     private fun findViews(view: View) {
+        rootView = view.findViewById(R.id.root)
         recyclerView = view.findViewById(R.id.recycler_view)
         hint = view.findViewById(R.id.hint)
     }

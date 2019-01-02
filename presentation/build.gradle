@@ -67,9 +67,6 @@ dependencies {
     kapt rootProject.ext.moxyCompiler
     implementation rootProject.ext.moxyCompat
 
-    // Room
-    implementation rootProject.ext.room
-
     androidTestImplementation rootProject.ext.espressoCore
     androidTestImplementation rootProject.ext.espressoIntents
     androidTestImplementation rootProject.ext.testRules

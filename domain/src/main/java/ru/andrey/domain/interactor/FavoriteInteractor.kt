@@ -1,8 +1,7 @@
 package ru.andrey.domain.interactor
 
+import io.reactivex.Completable
 import io.reactivex.Scheduler
-import io.reactivex.Single
-import ru.andrey.domain.model.Translation
 import ru.andrey.domain.repository.TranslationRepository
 
 class FavoriteInteractor(private val ioScheduler: Scheduler,
@@ -14,12 +13,12 @@ class FavoriteInteractor(private val ioScheduler: Scheduler,
      * Subscribed on Schedulers.io()
      *
      * @param itemId id of model to toggle favorite
-     * @return Single with new model toggled to favorite
+     * @return Completable
      */
-    fun toggleFavorite(itemId: Int): Single<Translation> {
+    fun toggleFavorite(itemId: Int): Completable {
         return translationRepository.findById(itemId)
                 .doOnSuccess { it.favorite = !it.favorite }
-                .flatMap { translationRepository.update(it) }
+                .flatMapCompletable { translationRepository.update(it) }
                 .subscribeOn(ioScheduler)
     }
 }

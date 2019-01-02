@@ -11,11 +11,13 @@ interface TranslationRepository {
 
     fun findById(id: Int): Single<Translation>
 
-    fun save(item: Translation): Single<Translation>
+    fun save(item: Translation): Completable
 
-    fun update(item: Translation): Single<Translation>
+    fun update(item: Translation): Completable
 
     fun delete(id: Int): Completable
+
+    fun restore(id: Int): Completable
 
     fun initLanguages(vararg langs: String)
 }

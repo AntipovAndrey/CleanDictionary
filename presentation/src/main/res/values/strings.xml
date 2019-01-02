@@ -6,6 +6,8 @@
 	<string name="enter_word_here_hint">Enter word here</string>
 	<string name="add_word_hint">Click the button to add a word!</string>
 	<string name="fav_word_hint">Mark your words with a star to see them here</string>
+    <string name="word_was_removed">Word was removed</string>
+    <string name="undo_string">undo</string>
 	<string-array name="languages_spinner_items">
 		<item>En</item>
 		<item>Ru</item>

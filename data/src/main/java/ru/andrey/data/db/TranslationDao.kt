@@ -1,16 +1,18 @@
 package ru.andrey.data.db
 
 import android.arch.persistence.room.*
+import io.reactivex.Flowable
+import io.reactivex.Single
 import ru.andrey.data.db.entity.TranslationData
 
 @Dao
 interface TranslationDao {
 
-    @Query("SELECT * FROM translations ORDER BY id DESC")
-    fun getAll(): List<TranslationData>
+    @Query("SELECT * FROM translations WHERE deleted = 0 ORDER BY id DESC")
+    fun getAll(): Flowable<List<TranslationData>>
 
-    @Query("SELECT * FROM translations WHERE id=:id")
-    fun findById(id: Int): TranslationData?
+    @Query("SELECT * FROM translations WHERE id = :id AND deleted = 0")
+    fun findById(id: Int): Single<TranslationData>
 
     @Insert
     fun save(item: TranslationData): Long
@@ -18,6 +20,9 @@ interface TranslationDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(item: TranslationData)
 
-    @Query("DELETE FROM translations WHERE id=:id")
+    @Query("UPDATE translations SET deleted = 1 WHERE id = :id")
     fun delete(id: Int)
+
+    @Query("UPDATE translations SET deleted = 0 WHERE id = :id")
+    fun restore(id: Int)
 }

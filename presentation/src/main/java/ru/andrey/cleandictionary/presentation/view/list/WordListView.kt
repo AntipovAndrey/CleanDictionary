@@ -15,4 +15,7 @@ interface WordListView : MvpView {
     fun openAddWord()
 
     fun show(items: List<TranslationDto>)
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun showSnackBar()
 }

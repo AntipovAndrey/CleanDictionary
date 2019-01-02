@@ -12,5 +12,6 @@ data class TranslationData(
         var translation: String,
         var from: Int,
         var to: Int,
+        var deleted: Boolean,
         var favorite: Boolean
 )

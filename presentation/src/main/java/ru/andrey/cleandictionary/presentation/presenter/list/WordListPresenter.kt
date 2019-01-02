@@ -22,6 +22,8 @@ constructor(private val listInteracotor: TranslationListInteractor,
     private val disposables = CompositeDisposable()
     private var listDisposable: Disposable? = null
 
+    private var lastSwipedId: Int? = null
+
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         populateList()
@@ -39,6 +41,8 @@ constructor(private val listInteracotor: TranslationListInteractor,
         listInteracotor.deleteWord(id)
                 .subscribe()
                 .also { disposables.add(it) }
+        lastSwipedId = id
+        viewState.showSnackBar()
     }
 
     fun clickFavorite() {
@@ -59,6 +63,10 @@ constructor(private val listInteracotor: TranslationListInteractor,
         super.onDestroy()
         disposables.dispose()
         listDisposable?.dispose()
+    }
+
+    fun clickUndoRemoving() {
+        lastSwipedId?.let { listInteracotor.restoreWord(it).subscribe() }
     }
 
     private fun populateList() {
