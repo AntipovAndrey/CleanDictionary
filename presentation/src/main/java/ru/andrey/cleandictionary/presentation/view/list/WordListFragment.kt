@@ -89,8 +89,6 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
         }
         showRecyclerView()
         wordAdapter.submitList(items)
-        recyclerView.scrollToPosition(0)
-        recyclerView.post { recyclerView.smoothScrollToPosition(0) }
     }
 
     override fun showSnackBar() {
