@@ -93,7 +93,11 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
             return
         }
         showRecyclerView()
+        val oldSize = wordAdapter.itemCount
         wordAdapter.submitList(items)
+        if (oldSize < items.size) {
+            recyclerView.postDelayed({ recyclerView.smoothScrollToPosition(0) }, 200)
+        }
     }
 
     override fun showSnackBar() {
