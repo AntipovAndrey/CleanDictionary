@@ -20,6 +20,13 @@ class TranslationInteractor(private val ioScheduler: Scheduler,
     fun getTranslation(word: String, from: Language, to: Language): Single<List<String>> {
         return translationService
                 .getTranslation(word = word, from = from.languageCode, to = to.languageCode)
+                .onErrorReturn {
+                    if (it.message?.contains("400") != false) {
+                        listOf(word)
+                    } else {
+                        throw it
+                    }
+                }
                 .subscribeOn(ioScheduler)
     }
 }

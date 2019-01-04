@@ -39,6 +39,8 @@ constructor(private val translationInteractor: TranslationInteractor,
 
     override fun onFirstViewAttach() {
         Observables.combineLatest(wordSubject, langFromSubject, langToSubject, ::WordDto)
+                .doOnNext { resetState() }
+                .filter { !it.word.isEmpty() }
                 .doOnNext { setMenuButtonState(MenuState.LOADING) }
                 .switchMap {
                     translateWord(it)
@@ -112,14 +114,25 @@ constructor(private val translationInteractor: TranslationInteractor,
     }
 
     private fun translationSucceed(translations: List<String>) {
-        viewState.setAlternativeTranslations(translations)
-        selectTranslation(translations[0])
-        setMenuButtonState(MenuState.ADD)
+        if (translations.isEmpty()) {
+            resetState()
+        } else {
+            viewState.setAlternativeTranslations(translations)
+            selectTranslation(translations[0])
+            setMenuButtonState(MenuState.ADD)
+        }
     }
 
     private fun translationError(error: Throwable) {
+        resetState()
         viewState.showError(error)
         setMenuButtonState(MenuState.RETRY)
+    }
+
+    private fun resetState() {
+        viewState.setTranslation("")
+        setMenuButtonState(MenuState.NO)
+        viewState.setAlternativeTranslations(listOf())
     }
 
     private fun translateWord(wordDto: WordDto): Single<List<String>> {
