@@ -89,18 +89,18 @@ constructor(private val translationInteractor: TranslationInteractor,
         retrySubject.onNext(retrySubject)
     }
 
-    private fun translationSucceed(translated: String) {
-        viewState.updateTranslation(translated)
-        translation = translated
+    private fun translationSucceed(translations: List<String>) {
+        viewState.setTranslations(translations)
+        translation = translations[0]
         viewState.setButtonState(ButtonState.ADD)
     }
 
     private fun translationError(error: Throwable) {
-        viewState.errorToast("Error")
+        viewState.showError(error)
         viewState.setButtonState(ButtonState.RETRY)
     }
 
-    private fun translateWord(wordDto: WordDto): Single<String> {
+    private fun translateWord(wordDto: WordDto): Single<List<String>> {
         return translationInteractor
                 .getTranslation(wordDto.word,
                         Language.byCode(wordDto.from),

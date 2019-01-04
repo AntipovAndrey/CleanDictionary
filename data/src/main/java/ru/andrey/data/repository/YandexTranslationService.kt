@@ -6,8 +6,8 @@ import ru.andrey.domain.repository.TranslationService
 
 class YandexTranslationService(private val api: YandexApi) : TranslationService {
 
-    override fun getTranslation(word: String, from: String, to: String): Single<String> {
+    override fun getTranslation(word: String, from: String, to: String): Single<List<String>> {
         return api.getTranslation(word, "$from-$to")
-                .map { it.translations[0] }
+                .map { it.translations }
     }
 }

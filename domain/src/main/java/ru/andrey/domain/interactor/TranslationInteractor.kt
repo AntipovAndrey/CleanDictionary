@@ -17,7 +17,7 @@ class TranslationInteractor(private val ioScheduler: Scheduler,
      * @param word word to be translated,
      * @return Single of translation
      */
-    fun getTranslation(word: String, from: Language, to: Language): Single<String> {
+    fun getTranslation(word: String, from: Language, to: Language): Single<List<String>> {
         return translationService
                 .getTranslation(word = word, from = from.languageCode, to = to.languageCode)
                 .subscribeOn(ioScheduler)

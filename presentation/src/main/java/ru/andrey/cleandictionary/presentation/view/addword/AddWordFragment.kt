@@ -3,10 +3,16 @@ package ru.andrey.cleandictionary.presentation.view.addword
 import android.app.Activity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.EditText
+import android.widget.ProgressBar
+import android.widget.Spinner
+import android.widget.TextView
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -101,8 +107,8 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
         }
     }
 
-    override fun updateTranslation(word: String) {
-        translation.text = word
+    override fun setTranslations(translations: List<String>) {
+        translation.text = translations[0]
     }
 
     override fun errorToast(error: String) {

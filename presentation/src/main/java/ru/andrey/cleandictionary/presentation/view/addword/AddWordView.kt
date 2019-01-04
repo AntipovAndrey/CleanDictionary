@@ -9,7 +9,7 @@ import ru.andrey.cleandictionary.presentation.presenter.addword.ButtonState
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface AddWordView : MvpView {
 
-    fun updateTranslation(word: String)
+    fun setTranslations(translations: List<String>)
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun errorToast(error: String)

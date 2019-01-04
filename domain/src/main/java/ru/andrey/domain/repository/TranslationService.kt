@@ -4,5 +4,5 @@ import io.reactivex.Single
 
 interface TranslationService {
 
-    fun getTranslation(word: String, from: String, to: String): Single<String>
+    fun getTranslation(word: String, from: String, to: String): Single<List<String>>
 }
