@@ -1,6 +1,6 @@
 package ru.andrey.cleandictionary.presentation.presenter.addword
 
-enum class ButtonState {
+enum class MenuState {
 
     NO, ADD, LOADING, RETRY
 }

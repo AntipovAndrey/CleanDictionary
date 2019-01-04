@@ -23,7 +23,7 @@ class WordAdapter(private val itemClicked: (Int) -> Unit,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.dictionary_list_item, parent, false)
+                .inflate(R.layout.word_list_item, parent, false)
         return Holder(view)
     }
 

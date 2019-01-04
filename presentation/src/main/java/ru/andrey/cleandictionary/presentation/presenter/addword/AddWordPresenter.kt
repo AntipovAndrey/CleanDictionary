@@ -27,19 +27,19 @@ constructor(private val translationInteractor: TranslationInteractor,
     private lateinit var langFrom: String
     private lateinit var langTo: String
 
-
     private val wordSubject = BehaviorSubject.create<String>()
     private val langFromSubject = BehaviorSubject.create<String>()
     private val langToSubject = BehaviorSubject.create<String>()
 
     private val retrySubject = PublishSubject.create<Any>()
 
+    private var currentMenuButtonState = MenuState.NO
+
     private lateinit var translateDisposable: Disposable
 
     override fun onFirstViewAttach() {
-        viewState.setButtonState(ButtonState.NO)
         Observables.combineLatest(wordSubject, langFromSubject, langToSubject, ::WordDto)
-                .doOnNext { viewState.setButtonState(ButtonState.LOADING) }
+                .doOnNext { setMenuButtonState(MenuState.LOADING) }
                 .switchMap {
                     translateWord(it)
                             .toObservable()
@@ -59,6 +59,10 @@ constructor(private val translationInteractor: TranslationInteractor,
         translateDisposable.dispose()
     }
 
+    fun menuCreated() {
+        setMenuButtonState(currentMenuButtonState)
+    }
+
     fun setWord(term: String) {
         inputText = term
         wordSubject.onNext(term)
@@ -74,7 +78,15 @@ constructor(private val translationInteractor: TranslationInteractor,
         langToSubject.onNext(langCode)
     }
 
-    fun addWord() {
+    fun menuClick() {
+        if (currentMenuButtonState == MenuState.ADD) {
+            addWord()
+        } else if (currentMenuButtonState == MenuState.RETRY) {
+            retry()
+        }
+    }
+
+    private fun addWord() {
         translationsListInteractor.saveWord(Translation(
                 word = inputText!!,
                 translation = translation!!,
@@ -85,19 +97,24 @@ constructor(private val translationInteractor: TranslationInteractor,
         viewState.close()
     }
 
-    fun retry() {
+    private fun retry() {
         retrySubject.onNext(retrySubject)
+    }
+
+    private fun setMenuButtonState(state: MenuState) {
+        currentMenuButtonState = state
+        viewState.setMenuState(state)
     }
 
     private fun translationSucceed(translations: List<String>) {
         viewState.setTranslations(translations)
         translation = translations[0]
-        viewState.setButtonState(ButtonState.ADD)
+        setMenuButtonState(MenuState.ADD)
     }
 
     private fun translationError(error: Throwable) {
         viewState.showError(error)
-        viewState.setButtonState(ButtonState.RETRY)
+        setMenuButtonState(MenuState.RETRY)
     }
 
     private fun translateWord(wordDto: WordDto): Single<List<String>> {

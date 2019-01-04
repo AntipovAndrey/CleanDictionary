@@ -27,7 +27,7 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
     private lateinit var recyclerView: RecyclerView
     private lateinit var hint: TextView
 
-    private var favoriteItem: MenuItem? = null
+    private lateinit var favoriteItem: MenuItem
     private var favoriteEnabled: Boolean = false
 
     private lateinit var wordAdapter: WordAdapter
@@ -51,7 +51,7 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.dictionary_list_fragment, container, false)
+        val view = inflater.inflate(R.layout.word_list_fragment, container, false)
         findViews(view)
         setupToolbar()
         setupButtonListener(view)
@@ -61,20 +61,21 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_menu, menu)
+        inflater.inflate(R.menu.word_list_menu, menu)
         favoriteItem = menu!!.getItem(0)
-        setFavoriteMenuIcon(favoriteEnabled)
         listPresenter.menuCreated()
     }
 
     override fun setFavoriteMenuIcon(activate: Boolean) {
         favoriteEnabled = activate
-        if (favoriteItem != null) {
-            favoriteItem!!.setIcon(if (activate)
-                R.drawable.ic_favorite_24dp
-            else
-                R.drawable.ic_favorite_border_24dp)
+
+        if (!::favoriteItem.isInitialized) {
+            return
         }
+        favoriteItem.setIcon(if (activate)
+            R.drawable.ic_favorite_24dp
+        else
+            R.drawable.ic_favorite_border_24dp)
     }
 
     override fun openAddWord() {

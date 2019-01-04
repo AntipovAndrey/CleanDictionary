@@ -4,7 +4,7 @@ import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
-import ru.andrey.cleandictionary.presentation.presenter.addword.ButtonState
+import ru.andrey.cleandictionary.presentation.presenter.addword.MenuState
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface AddWordView : MvpView {
@@ -14,7 +14,7 @@ interface AddWordView : MvpView {
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun showError(error: Throwable)
 
-    fun setButtonState(buttonState: ButtonState)
+    fun setMenuState(menuState: MenuState)
 
     fun close()
 }

@@ -2,15 +2,12 @@ package ru.andrey.cleandictionary.presentation.view.addword
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
+import android.support.annotation.DrawableRes
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import com.arellomobile.mvp.MvpAppCompatFragment
@@ -23,7 +20,7 @@ import io.reactivex.disposables.CompositeDisposable
 import ru.andrey.cleandictionary.App
 import ru.andrey.cleandictionary.R
 import ru.andrey.cleandictionary.presentation.presenter.addword.AddWordPresenter
-import ru.andrey.cleandictionary.presentation.presenter.addword.ButtonState
+import ru.andrey.cleandictionary.presentation.presenter.addword.MenuState
 import java.util.concurrent.TimeUnit
 
 class AddWordFragment : MvpAppCompatFragment(), AddWordView {
@@ -32,11 +29,10 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
     private lateinit var toolbar: Toolbar
     private lateinit var wordEditText: EditText
     private lateinit var translation: TextView
-    private lateinit var addButton: FloatingActionButton
-    private lateinit var retryButton: FloatingActionButton
-    private lateinit var progressBar: ProgressBar
     private lateinit var langFromSpinner: Spinner
     private lateinit var langToSpinner: Spinner
+
+    private lateinit var menuAction: MenuItem
 
     private lateinit var compositeDisposable: CompositeDisposable
 
@@ -51,6 +47,11 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
                 .addWordPresenter()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -60,14 +61,25 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
         if (savedInstanceState == null) {
             initSpinners()
         }
-        setButtonState(ButtonState.NO)
         return view
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.add_word_menu, menu)
+        menuAction = menu.getItem(0)
+        presenter.menuCreated()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_action) {
+            presenter.menuClick()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onStart() {
         super.onStart()
         compositeDisposable = CompositeDisposable()
-        setupButtonListeners()
         setupSpinnerListeners()
         setupTextListeners()
     }
@@ -77,31 +89,15 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
         compositeDisposable.dispose()
     }
 
-    override fun setButtonState(buttonState: ButtonState) {
-        when (buttonState) {
-            ButtonState.NO -> {
-                showProgressBar(false)
-                enableAddButton(false)
-                enableRetry(false)
-            }
-
-            ButtonState.ADD -> {
-                showProgressBar(false)
-                enableAddButton(true)
-                enableRetry(false)
-            }
-
-            ButtonState.LOADING -> {
-                showProgressBar(true)
-                enableAddButton(false)
-                enableRetry(false)
-            }
-
-            ButtonState.RETRY -> {
-                showProgressBar(false)
-                enableAddButton(false)
-                enableRetry(true)
-            }
+    override fun setMenuState(menuState: MenuState) {
+        if (!::menuAction.isInitialized) {
+            return
+        }
+        when (menuState) {
+            MenuState.NO -> menuAction.isVisible = false
+            MenuState.ADD -> showMenuItemIcon(R.drawable.ic_add_24dp)
+            MenuState.LOADING -> menuAction.isVisible = false
+            MenuState.RETRY -> showMenuItemIcon(R.drawable.ic_refresh_24dp)
         }
     }
 
@@ -116,11 +112,6 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
     override fun close() {
         activity!!.setResult(Activity.RESULT_OK)
         activity!!.finish()
-    }
-
-    private fun setupButtonListeners() {
-        addButton.setOnClickListener { presenter.addWord() }
-        retryButton.setOnClickListener { presenter.retry() }
     }
 
     private fun initSpinners() {
@@ -141,25 +132,13 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
         toolbar = view.findViewById(R.id.toolbar)
         wordEditText = view.findViewById(R.id.word_edit_text)
         translation = view.findViewById(R.id.translation_text_view)
-        addButton = view.findViewById(R.id.add_word)
-        progressBar = view.findViewById(R.id.progressBar)
-        retryButton = view.findViewById(R.id.retry)
         langFromSpinner = view.findViewById(R.id.lang_from_spinner)
         langToSpinner = view.findViewById(R.id.lang_to_spinner)
     }
 
-    private fun showProgressBar(enabled: Boolean) {
-        progressBar.visibility = if (enabled) View.VISIBLE else View.INVISIBLE
-    }
-
-    private fun enableAddButton(enabled: Boolean) {
-        addButton.visibility = if (enabled) View.VISIBLE else View.INVISIBLE
-        addButton.isEnabled = enabled
-    }
-
-    private fun enableRetry(enabled: Boolean) {
-        retryButton.visibility = if (enabled) View.VISIBLE else View.INVISIBLE
-        retryButton.isEnabled = enabled
+    private fun showMenuItemIcon(@DrawableRes id: Int) {
+        menuAction.isVisible = true
+        menuAction.setIcon(id)
     }
 
     private fun setupSpinnerListeners() {
