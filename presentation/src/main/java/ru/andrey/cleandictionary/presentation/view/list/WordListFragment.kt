@@ -3,8 +3,10 @@ package ru.andrey.cleandictionary.presentation.view.list
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import android.widget.TextView
@@ -20,8 +22,9 @@ import ru.andrey.cleandictionary.presentation.view.addword.AddWordActivity
 
 class WordListFragment : MvpAppCompatFragment(), WordListView {
 
-    private lateinit var recyclerView: RecyclerView
     private lateinit var rootView: View
+    private lateinit var toolbar: Toolbar
+    private lateinit var recyclerView: RecyclerView
     private lateinit var hint: TextView
 
     private var favoriteItem: MenuItem? = null
@@ -50,6 +53,7 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
                               savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.dictionary_list_fragment, container, false)
         findViews(view)
+        setupToolbar()
         setupButtonListener(view)
         showHint()
         setupRecycler()
@@ -122,7 +126,12 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
         ItemTouchHelper(itemTouch).attachToRecyclerView(recyclerView)
     }
 
+    private fun setupToolbar() {
+        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
+    }
+
     private fun findViews(view: View) {
+        toolbar = view.findViewById(R.id.toolbar)
         rootView = view.findViewById(R.id.root)
         recyclerView = view.findViewById(R.id.recycler_view)
         hint = view.findViewById(R.id.hint)

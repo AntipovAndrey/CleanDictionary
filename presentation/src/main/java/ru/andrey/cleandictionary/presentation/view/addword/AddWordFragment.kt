@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ import java.util.concurrent.TimeUnit
 class AddWordFragment : MvpAppCompatFragment(), AddWordView {
 
     private lateinit var rootView: View
+    private lateinit var toolbar: Toolbar
     private lateinit var wordEditText: EditText
     private lateinit var translation: TextView
     private lateinit var addButton: FloatingActionButton
@@ -54,17 +56,13 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
                               savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.add_word_fragment, container, false)
         findViews(view)
-        val items = resources.getStringArray(R.array.languages_spinner_items)
+        setupToolbar()
         if (savedInstanceState == null) {
-            langFromSpinner.setSelection(0)
-            presenter.setLangFrom(items[0])
-            langToSpinner.setSelection(1)
-            presenter.setLangTo(items[1])
+            initSpinners()
         }
         setButtonState(ButtonState.NO)
         return view
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -125,8 +123,22 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
         retryButton.setOnClickListener { presenter.retry() }
     }
 
+    private fun initSpinners() {
+        val items = resources.getStringArray(R.array.languages_spinner_items)
+        langFromSpinner.setSelection(0)
+        presenter.setLangFrom(items[0])
+        langToSpinner.setSelection(1)
+        presenter.setLangTo(items[1])
+    }
+
+    private fun setupToolbar() {
+        toolbar.setTitle(R.string.add_new_word)
+        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
+    }
+
     private fun findViews(view: View) {
         rootView = view.findViewById(R.id.root)
+        toolbar = view.findViewById(R.id.toolbar)
         wordEditText = view.findViewById(R.id.word_edit_text)
         translation = view.findViewById(R.id.translation_text_view)
         addButton = view.findViewById(R.id.add_word)
