@@ -3,11 +3,10 @@ package ru.andrey.cleandictionary.di.translation
 import dagger.Module
 import dagger.Provides
 import io.reactivex.schedulers.Schedulers
+import retrofit2.Retrofit
 import ru.andrey.cleandictionary.di.scope.Feature
-import ru.andrey.data.api.YandexApi
 import ru.andrey.data.db.TranslationDatabase
 import ru.andrey.data.repository.TranslationRepositoryImpl
-import ru.andrey.data.repository.YandexTranslationService
 import ru.andrey.domain.interactor.FavoriteInteractor
 import ru.andrey.domain.interactor.TranslationInteractor
 import ru.andrey.domain.interactor.TranslationListInteractor
@@ -15,7 +14,7 @@ import ru.andrey.domain.repository.TranslationRepository
 import ru.andrey.domain.repository.TranslationService
 
 @Module
-class TranslationModule {
+open class TranslationModule {
 
     @Provides
     @Feature
@@ -25,8 +24,8 @@ class TranslationModule {
 
     @Provides
     @Feature
-    fun provideTranslationService(api: YandexApi): TranslationService {
-        return YandexTranslationService(api)
+    open fun provideTranslationService(retrofit: Retrofit): TranslationService {
+        TODO("Override it in subclass")
     }
 
     @Feature

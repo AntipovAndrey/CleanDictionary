@@ -8,5 +8,5 @@ interface YandexApi {
 
     @GET("/api/v1.5/tr.json/translate")
     fun getTranslation(@Query("text") word: String,
-                       @Query("lang") langCodes: String): Single<TranslationResponseModel>
+                       @Query("lang") langCodes: String): Single<YandexApiResponse>
 }

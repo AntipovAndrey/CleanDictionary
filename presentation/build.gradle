@@ -15,6 +15,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "YANDEX_API_KEY", "\"${yandex_translator_api_key}\""
+        buildConfigField "String", "MICROSOFT_API_KEY", "\"${microsoft_translator_api_key}\""
     }
     buildTypes {
         release {

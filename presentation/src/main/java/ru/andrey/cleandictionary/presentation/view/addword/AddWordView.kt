@@ -9,7 +9,9 @@ import ru.andrey.cleandictionary.presentation.presenter.addword.MenuState
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface AddWordView : MvpView {
 
-    fun setTranslations(translations: List<String>)
+    fun setTranslation(translation: String)
+
+    fun setAlternativeTranslations(translations: List<String>)
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun showError(error: Throwable)

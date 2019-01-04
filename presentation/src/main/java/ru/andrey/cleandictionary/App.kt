@@ -8,7 +8,10 @@ import ru.andrey.cleandictionary.di.ApplicationModule
 import ru.andrey.cleandictionary.di.DaggerApplicationComponent
 import ru.andrey.cleandictionary.di.translation.DaggerTranslationComponent
 import ru.andrey.cleandictionary.di.translation.TranslationComponent
-import ru.andrey.cleandictionary.di.translation.TranslationDataModule
+import ru.andrey.cleandictionary.di.translation.microsoft.MicrosoftTranslationDataModule
+import ru.andrey.cleandictionary.di.translation.microsoft.MicrosoftTranslationModule
+import ru.andrey.cleandictionary.di.translation.yandex.YandexTranslationDataModule
+import ru.andrey.cleandictionary.di.translation.yandex.YandexTranslationModule
 import ru.andrey.domain.model.Language
 
 class App : Application() {
@@ -20,9 +23,24 @@ class App : Application() {
     }
 
     val translationComponent: TranslationComponent by lazy {
+
+        val useMicrosoft = !BuildConfig.MICROSOFT_API_KEY.isBlank()
+
+        val dataModule = if (useMicrosoft) {
+            MicrosoftTranslationDataModule(BuildConfig.MICROSOFT_API_KEY)
+        } else {
+            YandexTranslationDataModule(BuildConfig.YANDEX_API_KEY)
+        }
+
+        val translationModule = if (useMicrosoft) {
+            MicrosoftTranslationModule()
+        } else {
+            YandexTranslationModule()
+        }
         DaggerTranslationComponent.builder()
                 .applicationComponent(appComponent)
-                .translationDataModule(TranslationDataModule("https://translate.yandex.net/", BuildConfig.YANDEX_API_KEY))
+                .translationDataModule(dataModule)
+                .translationModule(translationModule)
                 .build()
     }
 

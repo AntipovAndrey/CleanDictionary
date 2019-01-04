@@ -86,6 +86,11 @@ constructor(private val translationInteractor: TranslationInteractor,
         }
     }
 
+    fun selectTranslation(translation: String) {
+        this.translation = translation
+        viewState.setTranslation(translation)
+    }
+
     private fun addWord() {
         translationsListInteractor.saveWord(Translation(
                 word = inputText!!,
@@ -107,8 +112,8 @@ constructor(private val translationInteractor: TranslationInteractor,
     }
 
     private fun translationSucceed(translations: List<String>) {
-        viewState.setTranslations(translations)
-        translation = translations[0]
+        viewState.setAlternativeTranslations(translations)
+        selectTranslation(translations[0])
         setMenuButtonState(MenuState.ADD)
     }
 
