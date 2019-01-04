@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +27,7 @@ import java.util.concurrent.TimeUnit
 
 class AddWordFragment : MvpAppCompatFragment(), AddWordView {
 
+    private lateinit var rootView: View
     private lateinit var wordEditText: EditText
     private lateinit var translation: TextView
     private lateinit var addButton: FloatingActionButton
@@ -111,8 +111,8 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
         translation.text = translations[0]
     }
 
-    override fun errorToast(error: String) {
-        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
+    override fun showError(error: Throwable) {
+        Snackbar.make(rootView, R.string.error_no_connection, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun close() {
@@ -126,6 +126,7 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
     }
 
     private fun findViews(view: View) {
+        rootView = view.findViewById(R.id.root)
         wordEditText = view.findViewById(R.id.word_edit_text)
         translation = view.findViewById(R.id.translation_text_view)
         addButton = view.findViewById(R.id.add_word)

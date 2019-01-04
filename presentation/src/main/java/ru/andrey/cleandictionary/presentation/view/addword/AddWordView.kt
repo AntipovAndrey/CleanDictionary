@@ -12,7 +12,7 @@ interface AddWordView : MvpView {
     fun setTranslations(translations: List<String>)
 
     @StateStrategyType(OneExecutionStateStrategy::class)
-    fun errorToast(error: String)
+    fun showError(error: Throwable)
 
     fun setButtonState(buttonState: ButtonState)
 
