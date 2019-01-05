@@ -1,5 +1,6 @@
 package ru.andrey.cleandictionary.presentation.view.list
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -79,7 +80,15 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
     }
 
     override fun openAddWord() {
-        startActivity(Intent(activity, AddWordActivity::class.java))
+        startActivityForResult(Intent(activity, AddWordActivity::class.java), 42)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 42 && resultCode == RESULT_OK) {
+            recyclerView.postDelayed({
+                recyclerView.smoothScrollToPosition(0)
+            }, 250)
+        }
     }
 
     override fun show(items: List<TranslationDto>) {
@@ -93,11 +102,7 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
             return
         }
         showRecyclerView()
-        val oldSize = wordAdapter.itemCount
         wordAdapter.submitList(items)
-        if (oldSize < items.size) {
-            recyclerView.postDelayed({ recyclerView.smoothScrollToPosition(0) }, 200)
-        }
     }
 
     override fun showSnackBar() {
