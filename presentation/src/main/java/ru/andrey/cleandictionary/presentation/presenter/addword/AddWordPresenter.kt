@@ -116,11 +116,16 @@ constructor(private val translationInteractor: TranslationInteractor,
     private fun translationSucceed(translations: List<String>) {
         if (translations.isEmpty()) {
             resetState()
+            return
+        }
+        if (translations.size == 1) {
+            viewState.enableAlternatives(false)
         } else {
             viewState.setAlternativeTranslations(translations)
-            selectTranslation(translations[0])
-            setMenuButtonState(MenuState.ADD)
+            viewState.enableAlternatives(true)
         }
+        selectTranslation(translations[0])
+        setMenuButtonState(MenuState.ADD)
     }
 
     private fun translationError(error: Throwable) {
@@ -132,7 +137,7 @@ constructor(private val translationInteractor: TranslationInteractor,
     private fun resetState() {
         viewState.setTranslation("")
         setMenuButtonState(MenuState.NO)
-        viewState.setAlternativeTranslations(listOf())
+        viewState.enableAlternatives(false)
     }
 
     private fun translateWord(wordDto: WordDto): Single<List<String>> {

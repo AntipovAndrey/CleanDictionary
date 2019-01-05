@@ -30,6 +30,7 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
     private lateinit var rootView: View
     private lateinit var toolbar: Toolbar
     private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewBackground: View
     private lateinit var wordEditText: EditText
     private lateinit var translation: TextView
     private lateinit var langFromSpinner: Spinner
@@ -111,6 +112,10 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
         this.translation.text = translation
     }
 
+    override fun enableAlternatives(enabled: Boolean) {
+        recyclerViewBackground.visibility = if (enabled) View.VISIBLE else View.GONE
+    }
+
     override fun setAlternativeTranslations(translations: List<String>) {
         addWordAdapter.submitList(translations)
     }
@@ -148,6 +153,7 @@ class AddWordFragment : MvpAppCompatFragment(), AddWordView {
         rootView = view.findViewById(R.id.root)
         toolbar = view.findViewById(R.id.toolbar)
         recyclerView = view.findViewById(R.id.recycler_view)
+        recyclerViewBackground = view.findViewById(R.id.recycler_view_background)
         wordEditText = view.findViewById(R.id.word_edit_text)
         translation = view.findViewById(R.id.translation_text_view)
         langFromSpinner = view.findViewById(R.id.lang_from_spinner)

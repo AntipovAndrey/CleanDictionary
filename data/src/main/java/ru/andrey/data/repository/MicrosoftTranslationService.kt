@@ -9,6 +9,12 @@ class MicrosoftTranslationService(private val api: MicrosoftApi) : TranslationSe
 
     override fun getTranslation(word: String, from: String, to: String): Single<List<String>> {
         return api.getTranslation(MicrosoftApiRequest(word), from, to)
-                .map { it.translations.map { translation -> translation.displayTarget } }
+                .map { it.translations }
+                .map { it.map { translation -> translation.displayTarget } }
+                .filter { it.isNotEmpty() }
+                .switchIfEmpty(api.getLongTranslation(listOf(MicrosoftApiRequest(word)), from, to)
+                        .map { responseArray -> responseArray[0] }
+                        .map { it.translations }
+                        .map { it.map { translation -> translation.text } })
     }
 }

@@ -13,6 +13,8 @@ interface AddWordView : MvpView {
 
     fun setAlternativeTranslations(translations: List<String>)
 
+    fun enableAlternatives(enabled: Boolean)
+
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun showError(error: Throwable)
 
