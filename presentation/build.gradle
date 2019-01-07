@@ -32,7 +32,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
     implementation "com.android.support:appcompat-v7:$androidSupportLibVersion"
     implementation "com.android.support:recyclerview-v7:$androidSupportLibVersion"
@@ -44,12 +44,12 @@ dependencies {
     implementation "com.android.support:design:$androidSupportLibVersion"
 
     // Dependency Injection
-    kapt rootProject.ext.daggerCompiler
-    implementation rootProject.ext.dagger
+    kapt daggerCompiler
+    implementation dagger
 
     //  Rx dependencies
-    implementation rootProject.ext.rxJava
-    implementation rootProject.ext.rxKotlin
+    implementation rxJava
+    implementation rxKotlin
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
@@ -57,25 +57,22 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.1.1'
 
     // Retrofit
-    implementation rootProject.ext.retrofit
-    implementation rootProject.ext.retrofitRxJava2Adapter
+    implementation retrofit
+    implementation retrofitRxJava2Adapter
 
     // Gson
-    implementation rootProject.ext.retrofitGsonConverter
+    implementation retrofitGsonConverter
 
     // Moxy
-    implementation rootProject.ext.moxy
-    kapt rootProject.ext.moxyCompiler
-    implementation rootProject.ext.moxyCompat
+    implementation moxy
+    kapt moxyCompiler
+    implementation moxyCompat
 
-    androidTestImplementation rootProject.ext.espressoCore
-    androidTestImplementation rootProject.ext.espressoIntents
-    androidTestImplementation rootProject.ext.testRules
-    androidTestImplementation rootProject.ext.testRunner
+    androidTestImplementation espressoCore
+    androidTestImplementation espressoIntents
+    androidTestImplementation testRules
+    androidTestImplementation testRunner
 
     implementation project(':data')
     implementation project(':domain')
-}
-repositories {
-    mavenCentral()
 }

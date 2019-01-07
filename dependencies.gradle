@@ -31,9 +31,6 @@ ext {
     moxyCompiler = "com.arello-mobile:moxy-compiler:$moxyVersion"
     moxyCompat = "com.arello-mobile:moxy-app-compat:$moxyVersion"
 
-    // Kotlin
-    kotlinVersion = '1.2.70'
-
     // Testing
     junit = "junit:junit:4.12"
     mockito = "org.mockito:mockito-core:2.8.47"

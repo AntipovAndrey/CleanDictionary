@@ -33,26 +33,18 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
-    kapt rootProject.ext.daggerCompiler
-    implementation rootProject.ext.dagger
+    kapt daggerCompiler
+    implementation dagger
 
-    implementation rootProject.ext.rxJava
+    implementation rxJava
 
-    implementation rootProject.ext.retrofit
-    implementation rootProject.ext.retrofitGsonConverter
-    implementation rootProject.ext.retrofitRxJava2Adapter
+    implementation retrofit
+    implementation retrofitGsonConverter
+    implementation retrofitRxJava2Adapter
 
-    api rootProject.ext.roomRx
-    implementation rootProject.ext.room
-    kapt rootProject.ext.roomCompiler
-
-    testImplementation rootProject.ext.junit
-    testImplementation rootProject.ext.mockito
-    androidTestImplementation rootProject.ext.androidTestRunner
-    testImplementation "android.arch.persistence.room:testing:1.1.1"
+    api roomRx
+    implementation room
+    kapt roomCompiler
 
     implementation project(':domain')
-}
-repositories {
-    mavenCentral()
 }

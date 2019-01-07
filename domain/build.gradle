@@ -5,12 +5,9 @@ sourceCompatibility = 1.8
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    implementation rootProject.ext.rxJava
+    implementation rxJava
 
-    testImplementation rootProject.ext.junit5api
-    testImplementation rootProject.ext.junit5engine
-    testImplementation rootProject.ext.mockito
-}
-repositories {
-    mavenCentral()
+    testImplementation junit5api
+    testImplementation junit5engine
+    testImplementation mockito
 }
