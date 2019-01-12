@@ -8,10 +8,8 @@ import ru.andrey.cleandictionary.di.ApplicationModule
 import ru.andrey.cleandictionary.di.DaggerApplicationComponent
 import ru.andrey.cleandictionary.di.translation.DaggerTranslationComponent
 import ru.andrey.cleandictionary.di.translation.TranslationComponent
-import ru.andrey.cleandictionary.di.translation.microsoft.MicrosoftTranslationDataModule
-import ru.andrey.cleandictionary.di.translation.microsoft.MicrosoftTranslationModule
-import ru.andrey.cleandictionary.di.translation.yandex.YandexTranslationDataModule
-import ru.andrey.cleandictionary.di.translation.yandex.YandexTranslationModule
+import ru.andrey.cleandictionary.di.translation.TranslationDataModule
+import ru.andrey.cleandictionary.di.translation.TranslationModule
 import ru.andrey.domain.model.Language
 
 class App : Application() {
@@ -25,22 +23,21 @@ class App : Application() {
     val translationComponent: TranslationComponent by lazy {
 
         val useMicrosoft = !BuildConfig.MICROSOFT_API_KEY.isBlank()
+        val baseUrl: String
+        val key: String
 
-        val dataModule = if (useMicrosoft) {
-            MicrosoftTranslationDataModule(BuildConfig.MICROSOFT_API_KEY)
+        if (useMicrosoft) {
+            baseUrl = "https://api.cognitive.microsofttranslator.com/"
+            key = BuildConfig.MICROSOFT_API_KEY
         } else {
-            YandexTranslationDataModule(BuildConfig.YANDEX_API_KEY)
+            baseUrl = "https://translate.yandex.net/"
+            key = BuildConfig.YANDEX_API_KEY
         }
 
-        val translationModule = if (useMicrosoft) {
-            MicrosoftTranslationModule()
-        } else {
-            YandexTranslationModule()
-        }
         DaggerTranslationComponent.builder()
                 .applicationComponent(appComponent)
-                .translationDataModule(dataModule)
-                .translationModule(translationModule)
+                .translationDataModule(TranslationDataModule(baseUrl, key, useMicrosoft))
+                .translationModule(TranslationModule(useMicrosoft))
                 .build()
     }
 

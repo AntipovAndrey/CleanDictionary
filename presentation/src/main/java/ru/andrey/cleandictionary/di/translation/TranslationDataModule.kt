@@ -14,7 +14,9 @@ import ru.andrey.data.db.TranslationDatabase
 
 
 @Module
-open class TranslationDataModule(private val baseUrl: String) {
+open class TranslationDataModule(private val baseUrl: String,
+                                 private val apiKey: String,
+                                 private val useMicrosoft: Boolean) {
 
     @Feature
     @Provides
@@ -27,7 +29,7 @@ open class TranslationDataModule(private val baseUrl: String) {
     @Feature
     @Provides
     open fun provideInterceptors(): ArrayList<Interceptor> {
-        TODO("Override it in subclass")
+        return arrayListOf(if (useMicrosoft) microsoftInterceptor() else yandexInterceptor())
     }
 
     @Feature
@@ -43,6 +45,35 @@ open class TranslationDataModule(private val baseUrl: String) {
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(baseUrl)
                 .build()
+    }
+
+    private fun microsoftInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            val original = chain.request()
+
+            val request = original.newBuilder()
+                    .addHeader("Ocp-Apim-Subscription-Key", apiKey)
+                    .addHeader("Content-type", "application/json")
+                    .build()
+
+            chain.proceed(request)
+        }
+    }
+
+    private fun yandexInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            val original = chain.request()
+            val originalHttpUrl = original.url()
+            val url = originalHttpUrl.newBuilder()
+                    .addQueryParameter("key", apiKey)
+                    .build()
+
+            val requestBuilder = original.newBuilder()
+                    .url(url)
+
+            val request = requestBuilder.build()
+            chain.proceed(request)
+        }
     }
 }
 
