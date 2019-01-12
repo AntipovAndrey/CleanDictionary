@@ -23,6 +23,8 @@ import ru.andrey.cleandictionary.presentation.view.addword.AddWordActivity
 
 class WordListFragment : MvpAppCompatFragment(), WordListView {
 
+    private val WORD_ADDED = 42
+
     private lateinit var rootView: View
     private lateinit var toolbar: Toolbar
     private lateinit var recyclerView: RecyclerView
@@ -80,11 +82,11 @@ class WordListFragment : MvpAppCompatFragment(), WordListView {
     }
 
     override fun openAddWord() {
-        startActivityForResult(Intent(activity, AddWordActivity::class.java), 42)
+        startActivityForResult(Intent(activity, AddWordActivity::class.java), WORD_ADDED)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 42 && resultCode == RESULT_OK) {
+        if (requestCode == WORD_ADDED && resultCode == RESULT_OK) {
             recyclerView.postDelayed({
                 recyclerView.smoothScrollToPosition(0)
             }, 250)
